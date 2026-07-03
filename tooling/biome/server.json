@@ -1,0 +1,25 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.4.2/schema.json",
+	"extends": ["./base.json"],
+	"linter": {
+		"rules": {
+			"complexity": {
+				"noExcessiveCognitiveComplexity": "warn",
+				"useArrowFunction": "warn"
+			},
+			"correctness": {
+				"noUnusedImports": "error",
+				"noUnusedVariables": "warn",
+				"noConstructorReturn": "error"
+			},
+			"performance": {
+				"noAccumulatingSpread": "warn"
+			},
+			"style": {
+				"useConst": "warn",
+				"useTemplate": "warn",
+				"useImportType": "warn"
+			}
+		}
+	}
+}

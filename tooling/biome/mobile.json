@@ -1,0 +1,25 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.4.2/schema.json",
+	"extends": ["./base.json"],
+	"linter": {
+		"rules": {
+			"correctness": {
+				"noChildrenProp": "error",
+				"noUnusedImports": "warn",
+				"noUnusedVariables": "warn",
+				"useExhaustiveDependencies": "error",
+				"useHookAtTopLevel": "error"
+			},
+			"performance": {
+				"noAccumulatingSpread": "warn"
+			},
+			"style": {
+				"useConst": "warn",
+				"useTemplate": "warn"
+			},
+			"suspicious": {
+				"noConsole": "warn"
+			}
+		}
+	}
+}

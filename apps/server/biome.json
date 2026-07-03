@@ -1,0 +1,7 @@
+{
+	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+	"extends": ["@tooling/biome/server"],
+	"files": {
+		"includes": ["**", "!.omc", "!dist", "!node_modules", "!coverage", "!build"]
+	}
+}

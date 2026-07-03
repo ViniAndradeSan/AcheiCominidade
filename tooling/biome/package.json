@@ -1,0 +1,12 @@
+{
+	"$schema": "https://json.schemastore.org/package.json",
+	"name": "@tooling/biome",
+	"type": "module",
+	"exports": {
+		"./mobile": "./mobile.json",
+		"./server": "./server.json"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.4.2"
+	}
+}
