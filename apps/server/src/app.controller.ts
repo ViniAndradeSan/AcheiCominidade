@@ -1,5 +1,6 @@
 import { Controller, Get } from "@nestjs/common";
-import type { AppService } from "./app.service";
+// biome-ignore lint/style/useImportType: value import required at runtime for Nest DI metadata
+import { AppService } from "./app.service";
 
 @Controller()
 export class AppController {
