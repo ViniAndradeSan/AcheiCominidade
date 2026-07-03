@@ -6,6 +6,8 @@ on:
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
+env:
+  DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/postgres"
 jobs:
   biome:
     runs-on: ubuntu-latest
