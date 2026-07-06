@@ -9,9 +9,7 @@
 		"check": {
 			"cache": false
 		},
-		"test": {
-			"outputs": ["coverage/**"]
-		},
+		"test": {},
 		"start": {
 			"cache": false,
 			"persistent": true

@@ -18,6 +18,13 @@ const result = await build({
 		syntax: true,
 		whitespace: true,
 	},
+	// Keep all npm packages external instead of inlining them. Some deps
+	// (e.g. `libsql`, used by @prisma/adapter-libsql) resolve their native
+	// binary via a runtime `require(`@libsql/${platform}`)` call that only
+	// works when the package's real node_modules location is reachable —
+	// bundling it breaks that resolution. node_modules must ship alongside
+	// dist/ at runtime (see Dockerfile).
+	packages: "external",
 	external: optionalRequirePackages.filter((pkg) => {
 		try {
 			require(pkg);

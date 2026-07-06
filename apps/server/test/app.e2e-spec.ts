@@ -1,6 +1,6 @@
-import { describe, expect, it, beforeAll, afterAll } from "bun:test";
-import { Test } from "@nestjs/testing";
+import { afterAll, beforeAll, describe, expect, it } from "bun:test";
 import type { INestApplication } from "@nestjs/common";
+import { Test } from "@nestjs/testing";
 import request from "supertest";
 import { AppModule } from "../src/app.module";
 

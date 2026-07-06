@@ -12,4 +12,8 @@ async function bootstrap() {
 		logger.log(`Current environment is: ${process.env.NODE_ENV}`);
 	});
 }
-bootstrap();
+
+bootstrap().catch((error) => {
+	new Logger("bootstrap").error("Failed to start server", error);
+	process.exit(1);
+});

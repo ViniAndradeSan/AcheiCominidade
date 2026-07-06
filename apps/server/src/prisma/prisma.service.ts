@@ -12,10 +12,15 @@ export class PrismaService
 	implements OnModuleInit, OnModuleDestroy
 {
 	constructor() {
+		const url = process.env.DATABASE_URL;
+		if (!url) {
+			throw new Error(
+				"DATABASE_URL is not set. Copy .env.example to .env and configure it.",
+			);
+		}
+
 		super({
-			adapter: new PrismaLibSql({
-				url: process.env.DATABASE_URL as string,
-			}),
+			adapter: new PrismaLibSql({ url }),
 		});
 	}
 

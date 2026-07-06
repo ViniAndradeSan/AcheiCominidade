@@ -20,6 +20,9 @@ export function Collapsible({
 		<ThemedView>
 			<Pressable
 				testID={testIdBase}
+				accessibilityRole="button"
+				accessibilityLabel={title}
+				accessibilityState={{ expanded: isOpen }}
 				style={({ pressed }) => [
 					styles.heading,
 					pressed && styles.pressedHeading,
