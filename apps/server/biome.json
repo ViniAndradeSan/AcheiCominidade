@@ -11,5 +11,10 @@
 			"!build",
 			"!src/generated"
 		]
+	},
+	"javascript": {
+		"parser": {
+			"unsafeParameterDecoratorsEnabled": true
+		}
 	}
 }
