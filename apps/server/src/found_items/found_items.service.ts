@@ -1,6 +1,8 @@
 import { Inject, Injectable, NotFoundException } from "@nestjs/common";
+import type { Prisma } from "@/generated/prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 import type { CreateFoundItemDto } from "./dto/create-found_item.dto";
+import type { QueryFoundItemDto } from "./dto/query-found_item.dto";
 import type { UpdateFoundItemDto } from "./dto/update-found_item.dto";
 
 @Injectable()
@@ -13,8 +15,26 @@ export class FoundItemsService {
 		});
 	}
 
-	async findAll() {
+	async findAll(query: QueryFoundItemDto = {}) {
+		const where: Prisma.FoundItemWhereInput = {};
+
+		if (query.status) {
+			where.status = query.status;
+		}
+
+		if (query.category) {
+			where.category = { slug: query.category };
+		}
+
+		if (query.search) {
+			where.OR = [
+				{ title: { contains: query.search } },
+				{ description: { contains: query.search } },
+			];
+		}
+
 		return this.prisma.foundItem.findMany({
+			where,
 			include: { category: true },
 			orderBy: { foundAt: "desc" },
 		});

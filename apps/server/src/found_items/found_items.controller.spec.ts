@@ -68,10 +68,25 @@ describe("FoundItemsController", () => {
 		it("should return all found items", async () => {
 			mockService.findAll.mockResolvedValue([mockFoundItem]);
 
-			const result = await controller.findAll();
+			const result = await controller.findAll({});
 
 			expect(result).toEqual([mockFoundItem]);
-			expect(mockService.findAll).toHaveBeenCalled();
+			expect(mockService.findAll).toHaveBeenCalledWith({});
+		});
+
+		it("should pass query filters through to the service", async () => {
+			mockService.findAll.mockResolvedValue([mockFoundItem]);
+
+			const result = await controller.findAll({
+				status: "disponivel",
+				category: "eletronico",
+			});
+
+			expect(result).toEqual([mockFoundItem]);
+			expect(mockService.findAll).toHaveBeenCalledWith({
+				status: "disponivel",
+				category: "eletronico",
+			});
 		});
 	});
 

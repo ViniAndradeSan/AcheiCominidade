@@ -8,8 +8,10 @@ import {
 	ParseUUIDPipe,
 	Patch,
 	Post,
+	Query,
 } from "@nestjs/common";
 import type { CreateFoundItemDto } from "./dto/create-found_item.dto";
+import type { QueryFoundItemDto } from "./dto/query-found_item.dto";
 import type { UpdateFoundItemDto } from "./dto/update-found_item.dto";
 import { FoundItemsService } from "./found_items.service";
 
@@ -26,8 +28,8 @@ export class FoundItemsController {
 	}
 
 	@Get()
-	findAll() {
-		return this.foundItemsService.findAll();
+	findAll(@Query() query: QueryFoundItemDto) {
+		return this.foundItemsService.findAll(query);
 	}
 
 	@Get(":id")

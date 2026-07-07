@@ -40,6 +40,10 @@ model FoundItem {
   updatedAt         DateTime       @updatedAt @map("updated_at")
   itemReturn        ItemReturn?
 
+  @@index([status])
+  @@index([categoryId])
+  @@index([status, categoryId])
+  @@index([foundAt])
   @@map("found_items")
 }
 

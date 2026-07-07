@@ -93,6 +93,71 @@ describe("FoundItemsService", () => {
 
 			expect(result).toEqual([mockFoundItemWithCategory]);
 			expect(mockPrisma.foundItem.findMany).toHaveBeenCalledWith({
+				where: {},
+				include: { category: true },
+				orderBy: { foundAt: "desc" },
+			});
+		});
+
+		it("should filter by status", async () => {
+			mockPrisma.foundItem.findMany.mockResolvedValue([
+				mockFoundItemWithCategory,
+			]);
+
+			await service.findAll({ status: "disponivel" });
+
+			expect(mockPrisma.foundItem.findMany).toHaveBeenCalledWith({
+				where: { status: "disponivel" },
+				include: { category: true },
+				orderBy: { foundAt: "desc" },
+			});
+		});
+
+		it("should filter by category slug", async () => {
+			mockPrisma.foundItem.findMany.mockResolvedValue([
+				mockFoundItemWithCategory,
+			]);
+
+			await service.findAll({ category: "eletronico" });
+
+			expect(mockPrisma.foundItem.findMany).toHaveBeenCalledWith({
+				where: { category: { slug: "eletronico" } },
+				include: { category: true },
+				orderBy: { foundAt: "desc" },
+			});
+		});
+
+		it("should search by title or description", async () => {
+			mockPrisma.foundItem.findMany.mockResolvedValue([
+				mockFoundItemWithCategory,
+			]);
+
+			await service.findAll({ search: "carteira" });
+
+			expect(mockPrisma.foundItem.findMany).toHaveBeenCalledWith({
+				where: {
+					OR: [
+						{ title: { contains: "carteira" } },
+						{ description: { contains: "carteira" } },
+					],
+				},
+				include: { category: true },
+				orderBy: { foundAt: "desc" },
+			});
+		});
+
+		it("should combine status and category filters", async () => {
+			mockPrisma.foundItem.findMany.mockResolvedValue([
+				mockFoundItemWithCategory,
+			]);
+
+			await service.findAll({ status: "disponivel", category: "eletronico" });
+
+			expect(mockPrisma.foundItem.findMany).toHaveBeenCalledWith({
+				where: {
+					status: "disponivel",
+					category: { slug: "eletronico" },
+				},
 				include: { category: true },
 				orderBy: { foundAt: "desc" },
 			});
