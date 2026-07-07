@@ -7,6 +7,7 @@ async function bootstrap() {
 	const logger = new Logger(bootstrap.name);
 	const PORT = process.env.PORT ?? 3000;
 
+	app.enableCors();
 	app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
 	await app.listen(PORT, () => {
