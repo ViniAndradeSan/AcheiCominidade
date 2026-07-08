@@ -44,3 +44,5 @@ example
 
 # turbo
 .turbo/
+
+.env
