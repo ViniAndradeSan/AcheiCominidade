@@ -7,6 +7,11 @@ export interface GetFoundItemsParams {
 	search?: string;
 }
 
+interface FoundItemsResponse {
+	data: FoundItem[];
+	meta: { total: number; page: number; limit: number };
+}
+
 function buildQueryString(params?: GetFoundItemsParams): string {
 	if (!params) return "";
 
@@ -23,9 +28,12 @@ function buildQueryString(params?: GetFoundItemsParams): string {
 export function getFoundItems(
 	params?: GetFoundItemsParams,
 ): Promise<FoundItem[]> {
-	return apiFetch<FoundItem[]>(`/found-items${buildQueryString(params)}`);
+	return apiFetch<FoundItemsResponse>(
+		`/found-items${buildQueryString(params)}`,
+	).then((r) => r.data);
 }
 
+// item único não é paginado, continua igual
 export function getFoundItem(id: string): Promise<FoundItem> {
 	return apiFetch<FoundItem>(`/found-items/${id}`);
 }

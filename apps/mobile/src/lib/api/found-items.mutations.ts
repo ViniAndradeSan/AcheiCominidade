@@ -19,3 +19,9 @@ export function updateFoundItem(
 		body: JSON.stringify(input),
 	});
 }
+
+export function deleteFoundItem(id: string): Promise<void> {
+	return apiFetch<void>(`/found-items/${id}`, {
+		method: "DELETE",
+	});
+}
