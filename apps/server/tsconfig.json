@@ -1,9 +1,11 @@
-{
+﻿{
 	"$schema": "https://json.schemastore.org/tsconfig",
 	"extends": "../../tooling/typescript/server.json",
 	"compilerOptions": {
+		"ignoreDeprecations": "6.0",
 		"baseUrl": ".",
-		"types": ["bun"]
+		"types": ["bun", "jest"],
+		"strictPropertyInitialization": false
 	},
 	"include": ["src/**/*.ts", "env.d.ts", "scripts/**/*.ts", "prisma/**/*.ts"],
 	"exclude": ["node_modules", "dist"]
