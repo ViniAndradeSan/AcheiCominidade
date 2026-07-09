@@ -30,3 +30,13 @@ export function getFoundItems(
 export function getFoundItem(id: string): Promise<FoundItem> {
 	return apiFetch<FoundItem>(`/found-items/${id}`);
 }
+
+export const foundItemsKeys = {
+  all: ["found-items"] as const,
+
+  list: (filters: GetFoundItemsParams = {}) =>
+    [...foundItemsKeys.all, "list", filters] as const,
+
+  detail: (id: string) =>
+    [...foundItemsKeys.all, "detail", id] as const,
+};
