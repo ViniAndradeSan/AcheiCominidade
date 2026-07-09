@@ -1,63 +1,63 @@
-import { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
+import { useState } from "react";
 
 export type PickedImage = {
-  uri: string;
-  base64: string | null;
+	uri: string;
+	base64: string | null;
 };
 
 export function useImagePicker() {
-  const [image, setImage] = useState<PickedImage | null>(null);
-  const [error, setError] = useState<string | null>(null);
+	const [image, setImage] = useState<PickedImage | null>(null);
+	const [error, setError] = useState<string | null>(null);
 
-  async function pickFromCamera(): Promise<void> {
-    setError(null);
+	async function pickFromCamera(): Promise<void> {
+		setError(null);
 
-    const permission = await ImagePicker.requestCameraPermissionsAsync();
+		const permission = await ImagePicker.requestCameraPermissionsAsync();
 
-    if (!permission.granted) {
-      setError("Precisamos da câmera pra registrar o item");
-      return;
-    }
+		if (!permission.granted) {
+			setError("Precisamos da câmera pra registrar o item");
+			return;
+		}
 
-    const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ["images"],
-      quality: 0.5,
-      base64: true,
-    });
+		const result = await ImagePicker.launchCameraAsync({
+			mediaTypes: ["images"],
+			quality: 0.5,
+			base64: true,
+		});
 
-    if (result.canceled) return;
+		if (result.canceled) return;
 
-    const asset = result.assets[0];
-    setImage({ uri: asset.uri, base64: asset.base64 ?? null });
-  }
+		const asset = result.assets[0];
+		setImage({ uri: asset.uri, base64: asset.base64 ?? null });
+	}
 
-  async function pickFromGallery(): Promise<void> {
-    setError(null);
+	async function pickFromGallery(): Promise<void> {
+		setError(null);
 
-    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+		const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-    if (!permission.granted) {
-      setError("Precisamos da galeria pra selecionar uma foto");
-      return;
-    }
+		if (!permission.granted) {
+			setError("Precisamos da galeria pra selecionar uma foto");
+			return;
+		}
 
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
-      quality: 0.5,
-      base64: true,
-    });
+		const result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ["images"],
+			quality: 0.5,
+			base64: true,
+		});
 
-    if (result.canceled) return;
+		if (result.canceled) return;
 
-    const asset = result.assets[0];
-    setImage({ uri: asset.uri, base64: asset.base64 ?? null });
-  }
+		const asset = result.assets[0];
+		setImage({ uri: asset.uri, base64: asset.base64 ?? null });
+	}
 
-  function clear(): void {
-    setImage(null);
-    setError(null);
-  }
+	function clear(): void {
+		setImage(null);
+		setError(null);
+	}
 
-  return { image, error, pickFromCamera, pickFromGallery, clear };
+	return { image, error, pickFromCamera, pickFromGallery, clear };
 }

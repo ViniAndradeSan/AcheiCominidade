@@ -5,48 +5,53 @@ import { useTheme } from "@/hooks/use-theme";
 import type { ItemCategory } from "@/lib/types";
 
 export type CategoryPickerProps = {
-  categories: ItemCategory[];
-  value: string | null;
-  onChange: (categoryId: string) => void;
-  loading?: boolean;
+	categories: ItemCategory[];
+	value: string | null;
+	onChange: (categoryId: string) => void;
+	loading?: boolean;
 };
 
-export function CategoryPicker({ categories, value, onChange, loading }: CategoryPickerProps) {
-  const theme = useTheme();
+export function CategoryPicker({
+	categories,
+	value,
+	onChange,
+	loading,
+}: CategoryPickerProps) {
+	const theme = useTheme();
 
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator color={theme.text} size="small" />
-      </View>
-    );
-  }
+	if (loading) {
+		return (
+			<View style={styles.loadingContainer}>
+				<ActivityIndicator color={theme.text} size="small" />
+			</View>
+		);
+	}
 
-  return (
-    <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.scrollContent}
-    >
-      {categories.map((c) => (
-        <CategoryChip
-          key={c.id}
-          label={c.name}
-          selected={value === c.id}
-          onPress={() => onChange(c.id)}
-        />
-      ))}
-    </ScrollView>
-  );
+	return (
+		<ScrollView
+			horizontal
+			showsHorizontalScrollIndicator={false}
+			contentContainerStyle={styles.scrollContent}
+		>
+			{categories.map((c) => (
+				<CategoryChip
+					key={c.id}
+					label={c.name}
+					selected={value === c.id}
+					onPress={() => onChange(c.id)}
+				/>
+			))}
+		</ScrollView>
+	);
 }
 
 const styles = StyleSheet.create({
-  loadingContainer: {
-    paddingVertical: Spacing.three,
-    alignItems: "center",
-  },
-  scrollContent: {
-    gap: Spacing.two,
-    paddingHorizontal: Spacing.three,
-  },
+	loadingContainer: {
+		paddingVertical: Spacing.three,
+		alignItems: "center",
+	},
+	scrollContent: {
+		gap: Spacing.two,
+		paddingHorizontal: Spacing.three,
+	},
 });

@@ -1,5 +1,5 @@
-import { apiFetch } from "./client";
 import type { FoundItem, ItemStatus } from "../types";
+import { apiFetch } from "./client";
 
 export interface GetFoundItemsParams {
 	status?: ItemStatus;
@@ -32,11 +32,10 @@ export function getFoundItem(id: string): Promise<FoundItem> {
 }
 
 export const foundItemsKeys = {
-  all: ["found-items"] as const,
+	all: ["found-items"] as const,
 
-  list: (filters: GetFoundItemsParams = {}) =>
-    [...foundItemsKeys.all, "list", filters] as const,
+	list: (filters: GetFoundItemsParams = {}) =>
+		[...foundItemsKeys.all, "list", filters] as const,
 
-  detail: (id: string) =>
-    [...foundItemsKeys.all, "detail", id] as const,
+	detail: (id: string) => [...foundItemsKeys.all, "detail", id] as const,
 };
