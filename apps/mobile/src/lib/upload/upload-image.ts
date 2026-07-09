@@ -1,3 +1,6 @@
-export function buildPhotoDataUri(base64: string, mimeType = "image/jpeg"): string {
-  return `data:${mimeType};base64,${base64}`;
+export function buildPhotoDataUri(
+	base64: string,
+	mimeType = "image/jpeg",
+): string {
+	return `data:${mimeType};base64,${base64}`;
 }

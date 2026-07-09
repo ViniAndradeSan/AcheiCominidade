@@ -1,5 +1,5 @@
-import { apiFetch } from "./client";
 import type { ItemCategory } from "../types";
+import { apiFetch } from "./client";
 
 interface CategoriesResponse {
 	data: ItemCategory[];
