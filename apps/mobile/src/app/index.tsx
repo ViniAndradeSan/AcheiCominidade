@@ -6,6 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { CategoryChip } from "@/components/domain/category-chip";
 import { EmptyState } from "@/components/domain/empty-state";
 import { ErrorState } from "@/components/domain/error-state";
+import { LoadingState } from "@/components/domain/loading-state";
 import { ItemCard } from "@/components/domain/item-card";
 import { StatusFilterTabs } from "@/components/domain/status-filter-tabs";
 import { ThemedText } from "@/components/themed-text";
@@ -91,28 +92,28 @@ export default function HomeScreen() {
 					onRefresh={() => refetch()}
 					contentContainerStyle={styles.list}
 					ListEmptyComponent={
-						!isLoading ? (
-							isError ? (
-								<ErrorState
-									message="Erro ao carregar itens."
-									onRetry={() => refetch()}
-								/>
-							) : (
-								<EmptyState
-									title="Nenhum item encontrado"
-									description={
-										categorySlug
-											? "Nenhum item nessa categoria"
-											: `Nenhum item ${
-													status ===
-													"disponivel"
-														? "disponível"
-														: "devolvido"
-											  } encontrado`
-									}
-								/>
-							)
-						) : null
+						isLoading ? (
+							<LoadingState />
+						) : isError ? (
+							<ErrorState
+								message="Erro ao carregar itens."
+								onRetry={() => refetch()}
+							/>
+						) : (
+							<EmptyState
+								title="Nenhum item encontrado"
+								description={
+									categorySlug
+										? "Nenhum item nessa categoria"
+										: `Nenhum item ${
+												status ===
+												"disponivel"
+													? "disponível"
+													: "devolvido"
+										  } encontrado`
+								}
+							/>
+						)
 					}
 				/>
 

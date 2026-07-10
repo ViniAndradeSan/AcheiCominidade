@@ -1,8 +1,9 @@
 import { Stack, useLocalSearchParams } from "expo-router";
-import { ActivityIndicator, SafeAreaView, StyleSheet } from "react-native";
+import { SafeAreaView, StyleSheet } from "react-native";
 
 import { FoundItemForm } from "@/components/domain/found-item-form";
-import { ThemedText } from "@/components/themed-text";
+import { LoadingState } from "@/components/domain/loading-state";
+import { ErrorState } from "@/components/domain/error-state";
 import { useFoundItem } from "@/hooks/use-found-item";
 
 export default function UpdateFoundItemScreen() {
@@ -11,18 +12,14 @@ export default function UpdateFoundItemScreen() {
 	const { data: item, isLoading, isError } = useFoundItem(id);
 
 	if (isLoading) {
-		return (
-			<SafeAreaView style={styles.center}>
-				<ActivityIndicator size="large" />
-			</SafeAreaView>
-		);
+		return <LoadingState />;
 	}
 
 	if (isError || !item) {
 		return (
-			<SafeAreaView style={styles.center}>
-				<ThemedText>Item não encontrado.</ThemedText>
-			</SafeAreaView>
+			<ErrorState
+				message="Item não encontrado."
+			/>
 		);
 	}
 
