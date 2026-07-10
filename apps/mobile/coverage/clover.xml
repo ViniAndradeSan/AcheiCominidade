@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1783685530589" clover="3.2.0">
+  <project timestamp="1783685530590" name="All files">
+    <metrics statements="75" coveredstatements="63" conditionals="97" coveredconditionals="54" methods="24" coveredmethods="17" elements="196" coveredelements="134" complexity="0" loc="75" ncloc="75" packages="8" files="14" classes="14"/>
+    <package name="mobile">
+      <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="jest.css-mock.js" path="C:\Users\Vinicius Andrade\Downloads\past\achei-comunidade\apps\mobile\jest.css-mock.js">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="3" type="stmt"/>
+      </file>
+    </package>
+    <package name="mobile.src.components">
+      <metrics statements="5" coveredstatements="5" conditionals="23" coveredconditionals="16" methods="2" coveredmethods="2"/>
+      <file name="themed-text.tsx" path="C:\Users\Vinicius Andrade\Downloads\past\achei-comunidade\apps\mobile\src\components\themed-text.tsx">
+        <metrics statements="3" coveredstatements="3" conditionals="21" coveredconditionals="14" methods="1" coveredmethods="1"/>
+        <line num="25" count="24" type="stmt"/>
+        <line num="27" count="24" type="stmt"/>
+        <line num="46" count="2" type="stmt"/>
+      </file>
+      <file name="themed-view.tsx" path="C:\Users\Vinicius Andrade\Downloads\past\achei-comunidade\apps\mobile\src\components\themed-view.tsx">
+        <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+        <line num="19" count="5" type="stmt"/>
+        <line num="21" count="5" type="stmt"/>
+      </file>
+    </package>
+    <package name="mobile.src.components.domain">
+      <metrics statements="34" coveredstatements="26" conditionals="50" coveredconditionals="18" methods="9" coveredmethods="6"/>
+      <file name="category-chip.tsx" path="C:\Users\Vinicius Andrade\Downloads\past\achei-comunidade\apps\mobile\src\components\domain\category-chip.tsx">
+        <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="2" methods="1" coveredmethods="1"/>
+        <line num="13" count="2" type="stmt"/>
+        <line num="15" count="2" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+      </file>
+      <file name="category-picker.tsx" path="C:\Users\Vinicius Andrade\Downloads\past\achei-comunidade\apps\mobile\src\components\domain\category-picker.tsx">
+        <metrics statements="7" coveredstatements="5" conditionals="2" coveredconditionals="1" methods="3" coveredmethods="2"/>
+        <line num="20" count="2" type="stmt"/>
+        <line num="22" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="30" count="2" type="stmt"/>
+        <line num="37" count="2" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="48" count="1" type="stmt"/>
+      </file>
+      <file name="found-item-form.tsx" path="C:\Users\Vinicius Andrade\Downloads\past\achei-comunidade\apps\mobile\src\components\domain\found-item-form.tsx">
+        <metrics statements="21" coveredstatements="15" conditionals="40" coveredconditionals="12" methods="4" coveredmethods="2"/>
+        <line num="24" count="2" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
+        <line num="33" count="2" type="stmt"/>
+        <line num="40" count="2" type="stmt"/>
+        <line num="41" count="2" type="stmt"/>
+        <line num="42" count="2" type="stmt"/>
+        <line num="44" count="2" type="stmt"/>
+        <line num="45" count="2" type="stmt"/>
+        <line num="46" count="2" type="stmt"/>
+        <line num="47" count="2" type="stmt"/>
+        <line num="50" count="1" type="stmt"/>
+        <line num="51" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="55" count="2" type="cond" truecount="1" falsecount="4"/>
+        <line num="62" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="64" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="81" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="91" count="2" type="stmt"/>
+        <line num="208" count="1" type="stmt"/>
+      </file>
+      <file name="location-field.tsx" path="C:\Users\Vinicius Andrade\Downloads\past\achei-comunidade\apps\mobile\src\components\domain\location-field.tsx">
+        <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="3" methods="1" coveredmethods="1"/>
+        <line num="27" count="2" type="stmt"/>
+        <line num="29" count="2" type="stmt"/>
+        <line num="74" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="mobile.src.components.ui">
+      <metrics statements="7" coveredstatements="7" conditionals="6" coveredconditionals="5" methods="4" coveredmethods="4"/>
+      <file name="collapsible.tsx" path="C:\Users\Vinicius Andrade\Downloads\past\achei-comunidade\apps\mobile\src\components\ui\collapsible.tsx">
+        <metrics statements="7" coveredstatements="7" conditionals="6" coveredconditionals="5" methods="4" coveredmethods="4"/>
+        <line num="15" count="2" type="stmt"/>
+        <line num="16" count="2" type="stmt"/>
+        <line num="17" count="2" type="stmt"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="26" count="2" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="mobile.src.constants">
+      <metrics statements="5" coveredstatements="5" conditionals="2" coveredconditionals="1" methods="0" coveredmethods="0"/>
+      <file name="theme.ts" path="C:\Users\Vinicius Andrade\Downloads\past\achei-comunidade\apps\mobile\src\constants\theme.ts">
+        <metrics statements="5" coveredstatements="5" conditionals="2" coveredconditionals="1" methods="0" coveredmethods="0"/>
+        <line num="10" count="3" type="stmt"/>
+        <line num="29" count="3" type="stmt"/>
+        <line num="54" count="3" type="stmt"/>
+        <line num="64" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="65" count="3" type="stmt"/>
+      </file>
+    </package>
+    <package name="mobile.src.hooks">
+      <metrics statements="10" coveredstatements="10" conditionals="4" coveredconditionals="4" methods="3" coveredmethods="3"/>
+      <file name="use-color-scheme.ts" path="C:\Users\Vinicius Andrade\Downloads\past\achei-comunidade\apps\mobile\src\hooks\use-color-scheme.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="use-color-scheme.web.ts" path="C:\Users\Vinicius Andrade\Downloads\past\achei-comunidade\apps\mobile\src\hooks\use-color-scheme.web.ts">
+        <metrics statements="7" coveredstatements="7" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+        <line num="8" count="4" type="stmt"/>
+        <line num="10" count="4" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="14" count="4" type="stmt"/>
+        <line num="16" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="17" count="2" type="stmt"/>
+        <line num="20" count="2" type="stmt"/>
+      </file>
+      <file name="use-theme.ts" path="C:\Users\Vinicius Andrade\Downloads\past\achei-comunidade\apps\mobile\src\hooks\use-theme.ts">
+        <metrics statements="3" coveredstatements="3" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+        <line num="10" count="12" type="stmt"/>
+        <line num="11" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="13" count="12" type="stmt"/>
+      </file>
+    </package>
+    <package name="mobile.src.lib.api">
+      <metrics statements="12" coveredstatements="9" conditionals="11" coveredconditionals="10" methods="5" coveredmethods="2"/>
+      <file name="found-items.queries.ts" path="C:\Users\Vinicius Andrade\Downloads\past\achei-comunidade\apps\mobile\src\lib\api\found-items.queries.ts">
+        <metrics statements="12" coveredstatements="9" conditionals="11" coveredconditionals="10" methods="5" coveredmethods="2"/>
+        <line num="11" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="13" count="4" type="stmt"/>
+        <line num="15" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="16" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="17" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="19" count="4" type="stmt"/>
+        <line num="20" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="26" count="5" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="mobile.src.lib.upload">
+      <metrics statements="1" coveredstatements="0" conditionals="1" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <file name="upload-image.ts" path="C:\Users\Vinicius Andrade\Downloads\past\achei-comunidade\apps\mobile\src\lib\upload\upload-image.ts">
+        <metrics statements="1" coveredstatements="0" conditionals="1" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="5" count="0" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

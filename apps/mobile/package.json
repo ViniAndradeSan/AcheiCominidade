@@ -55,6 +55,7 @@
 		"check": "biome check --write .",
 		"lint": "biome check .",
 		"test": "jest",
+		"test:coverage": "jest --coverage",
 		"test:watch": "jest --watch",
 		"e2e:prebuild": "expo prebuild",
 		"e2e:build:ios": "detox build --configuration ios.sim.debug",

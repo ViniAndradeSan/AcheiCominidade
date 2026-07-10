@@ -58,6 +58,7 @@ export default function HomeScreen() {
 				</ScrollView>
 
 				<FlatList
+					style={{ flex: 1 }}
 					data={items}
 					keyExtractor={(item: FoundItem) => item.id}
 					renderItem={({ item }) => (
