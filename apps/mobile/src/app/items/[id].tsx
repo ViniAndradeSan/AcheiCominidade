@@ -8,7 +8,9 @@ import {
 	View,
 } from "react-native";
 
+import { ErrorState } from "@/components/domain/error-state";
 import { ItemPhoto } from "@/components/domain/item-photo";
+import { LoadingState } from "@/components/domain/loading-state";
 import { StatusBadge } from "@/components/domain/status-badge";
 import { ThemedText } from "@/components/themed-text";
 import { Spacing } from "@/constants/theme";
@@ -17,13 +19,13 @@ import { useTheme } from "@/hooks/use-theme";
 
 export default function ItemDetailScreen() {
 	const { id } = useLocalSearchParams<{ id: string }>();
-	const { data: item, isLoading, isError } = useFoundItem(id);
+	const { data: item, isLoading, isError, refetch } = useFoundItem(id);
 	const theme = useTheme();
 
 	if (isLoading) {
 		return (
 			<SafeAreaView style={styles.center}>
-				<ThemedText type="default">Carregando...</ThemedText>
+				<LoadingState />
 			</SafeAreaView>
 		);
 	}
@@ -31,7 +33,7 @@ export default function ItemDetailScreen() {
 	if (isError || !item) {
 		return (
 			<SafeAreaView style={styles.center}>
-				<ThemedText type="default">Item não encontrado.</ThemedText>
+				<ErrorState message="Item não encontrado." onRetry={() => refetch()} />
 			</SafeAreaView>
 		);
 	}
