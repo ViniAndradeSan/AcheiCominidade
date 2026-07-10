@@ -7,20 +7,25 @@ import { CategoryChip } from "@/components/domain/category-chip";
 import { EmptyState } from "@/components/domain/empty-state";
 import { ErrorState } from "@/components/domain/error-state";
 import { ItemCard } from "@/components/domain/item-card";
+import { StatusFilterTabs } from "@/components/domain/status-filter-tabs";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Spacing } from "@/constants/theme";
 import { useCategories } from "@/hooks/use-categories";
 import { useFoundItems } from "@/hooks/use-found-items";
 import { useTheme } from "@/hooks/use-theme";
-import type { FoundItem } from "@/lib/types";
+import type { FoundItem, ItemStatus } from "@/lib/types";
 
 export default function HomeScreen() {
 	const router = useRouter();
 	const theme = useTheme();
+
 	const [categorySlug, setCategorySlug] = useState<string | null>(null);
+	const [status, setStatus] =
+		useState<ItemStatus>("disponivel");
 
 	const { data: categories } = useCategories();
+
 	const {
 		data: items,
 		isLoading,
@@ -28,16 +33,24 @@ export default function HomeScreen() {
 		refetch,
 		isRefetching,
 	} = useFoundItems({
-		status: "disponivel",
+		status,
 		category: categorySlug ?? undefined,
 	});
 
 	return (
 		<ThemedView style={styles.container}>
 			<SafeAreaView style={styles.safeArea}>
-				<ThemedText type="title" style={styles.title}>
+				<ThemedText
+					type="title"
+					style={styles.title}
+				>
 					Achei Comunidade
 				</ThemedText>
+
+				<StatusFilterTabs
+					value={status}
+					onChange={setStatus}
+				/>
 
 				<ScrollView
 					horizontal
@@ -49,12 +62,15 @@ export default function HomeScreen() {
 						selected={categorySlug === null}
 						onPress={() => setCategorySlug(null)}
 					/>
+
 					{categories?.map((c) => (
 						<CategoryChip
 							key={c.id}
 							label={c.name}
 							selected={categorySlug === c.slug}
-							onPress={() => setCategorySlug(c.slug)}
+							onPress={() =>
+								setCategorySlug(c.slug)
+							}
 						/>
 					))}
 				</ScrollView>
@@ -66,7 +82,9 @@ export default function HomeScreen() {
 					renderItem={({ item }) => (
 						<ItemCard
 							item={item}
-							onPress={() => router.push(`/items/${item.id}`)}
+							onPress={() =>
+								router.push(`/items/${item.id}`)
+							}
 						/>
 					)}
 					refreshing={isRefetching}
@@ -85,7 +103,12 @@ export default function HomeScreen() {
 									description={
 										categorySlug
 											? "Nenhum item nessa categoria"
-											: "Nenhum item encontrado ainda"
+											: `Nenhum item ${
+													status ===
+													"disponivel"
+														? "disponível"
+														: "devolvido"
+											  } encontrado`
 									}
 								/>
 							)
@@ -94,10 +117,20 @@ export default function HomeScreen() {
 				/>
 
 				<Pressable
-					onPress={() => router.push("/items/new")}
-					style={[styles.fab, { backgroundColor: theme.backgroundSelected }]}
+					onPress={() =>
+						router.push("/items/new")
+					}
+					style={[
+						styles.fab,
+						{
+							backgroundColor:
+								theme.backgroundSelected,
+						},
+					]}
 				>
-					<ThemedText type="smallBold">+</ThemedText>
+					<ThemedText type="smallBold">
+						+
+					</ThemedText>
 				</Pressable>
 			</SafeAreaView>
 		</ThemedView>
@@ -108,21 +141,26 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 	},
+
 	safeArea: {
 		flex: 1,
 	},
+
 	title: {
 		textAlign: "center",
 		paddingTop: Spacing.two,
 	},
+
 	chipRow: {
 		gap: Spacing.two,
 		paddingHorizontal: Spacing.three,
 		paddingVertical: Spacing.two,
 	},
+
 	list: {
 		flexGrow: 1,
 	},
+
 	fab: {
 		position: "absolute",
 		bottom: Spacing.four,
