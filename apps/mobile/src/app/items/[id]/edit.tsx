@@ -23,7 +23,7 @@ export default function ConfirmReturnScreen() {
 	const theme = useTheme();
 
 	function handleConfirm() {
-		if (!id) return;
+		if (!id || isPending) return;
 
 		mutate(
 			{ itemId: id, observation: observation.trim() || undefined },
