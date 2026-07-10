@@ -1,25 +1,14 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
-import { updateFoundItem } from "@/lib/api/found-items.mutations";
-import { foundItemsKeys } from "@/lib/api/found-items.queries";
-import type { CreateFoundItemInput } from "@/lib/types";
+import {
+	foundItemsKeys,
+	type GetFoundItemsParams,
+	getFoundItems,
+} from "@/lib/api/found-items.queries";
 
-export function useUpdateFoundItem() {
-	const queryClient = useQueryClient();
-
-	return useMutation({
-		mutationFn: ({
-			id,
-			input,
-		}: {
-			id: string;
-			input: Partial<CreateFoundItemInput>;
-		}) => updateFoundItem(id, input),
-
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: foundItemsKeys.all,
-			});
-		},
+export function useFoundItems(filters: GetFoundItemsParams = {}) {
+	return useQuery({
+		queryKey: foundItemsKeys.list(filters),
+		queryFn: () => getFoundItems(filters),
 	});
 }
