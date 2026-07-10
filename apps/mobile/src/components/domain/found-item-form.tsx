@@ -46,6 +46,11 @@ export function FoundItemForm() {
 	const [categoryId, setCategoryId] = useState<string | null>(null);
 	const [locationText, setLocationText] = useState("");
 
+	async function handleUseCurrentLocation() {
+		const addr = await captureCurrentLocation();
+		if (addr) setLocationText(addr);
+	}
+
 	const canSubmit =
 		title.trim().length > 0 &&
 		categoryId !== null &&
@@ -70,7 +75,14 @@ export function FoundItemForm() {
 			},
 			{
 				onSuccess: () => {
-					router.back();
+					// Try to go back if there's history (works on native). On web
+					// `router.back()` can emit a development warning if there's no
+					// navigator to handle GO_BACK; fallback to replacing with root.
+					if (typeof window !== "undefined" && window.history.length > 1) {
+						router.back();
+					} else {
+						router.replace("/");
+					}
 				},
 			},
 		);
@@ -163,7 +175,7 @@ export function FoundItemForm() {
 			<LocationField
 				value={locationText}
 				onChangeText={setLocationText}
-				onUseCurrentLocation={captureCurrentLocation}
+				onUseCurrentLocation={handleUseCurrentLocation}
 				loadingLocation={locationLoading}
 				coordinatesCaptured={latitude !== null && longitude !== null}
 			/>
