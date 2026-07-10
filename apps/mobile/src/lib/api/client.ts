@@ -31,22 +31,51 @@ function resolveApiUrl(): string {
 
 const API_URL = resolveApiUrl();
 
+export class ApiError extends Error {
+	status: number;
+	constructor(status: number, message: string) {
+		super(`API error ${status}: ${message}`);
+		this.status = status;
+	}
+}
+
 export async function apiFetch<T>(
 	path: string,
 	options: RequestInit = {},
 ): Promise<T> {
-	const res = await fetch(`${API_URL}${path}`, {
-		headers: {
-			"Content-Type": "application/json",
-			...options.headers,
-		},
-		...options,
-	});
+	const controller = new AbortController();
+	const timeout = setTimeout(() => controller.abort(), 10_000);
 
-	if (!res.ok) {
-		const body = await res.text();
-		throw new Error(`API error ${res.status}: ${body}`);
+	try {
+		const res = await fetch(`${API_URL}${path}`, {
+			signal: controller.signal,
+			headers: {
+				"Content-Type": "application/json",
+				...options.headers,
+			},
+			...options,
+		});
+
+		if (!res.ok) {
+			const body = await res.text();
+			let message: string;
+			try {
+				const parsed = JSON.parse(body);
+				message = parsed?.message ?? body;
+			} catch {
+				message = body;
+			}
+			throw new ApiError(res.status, message);
+		}
+
+		return res.json();
+	} catch (err) {
+		if (err instanceof ApiError) throw err;
+		if (err instanceof DOMException && err.name === "AbortError") {
+			throw new ApiError(0, "Request timed out");
+		}
+		throw err;
+	} finally {
+		clearTimeout(timeout);
 	}
-
-	return res.json();
 }
