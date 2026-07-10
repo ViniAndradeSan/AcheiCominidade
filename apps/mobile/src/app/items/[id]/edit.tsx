@@ -19,7 +19,7 @@ import { useTheme } from "@/hooks/use-theme";
 export default function ConfirmReturnScreen() {
 	const { id } = useLocalSearchParams<{ id: string }>();
 	const [observation, setObservation] = useState("");
-	const { mutate, isPending, isError } = useReturnItem();
+	const { mutate, isPending, error } = useReturnItem();
 	const theme = useTheme();
 
 	function handleConfirm() {
@@ -30,6 +30,11 @@ export default function ConfirmReturnScreen() {
 			{
 				onSuccess: () => {
 					router.replace(`/items/${id}`);
+				},
+				onError: (err) => {
+					if (err.message.includes("409")) {
+						router.replace(`/items/${id}`);
+					}
 				},
 			},
 		);
@@ -56,9 +61,11 @@ export default function ConfirmReturnScreen() {
 					]}
 				/>
 
-				{isError ? (
+				{error ? (
 					<ThemedText type="small" style={styles.errorText}>
-						Não foi possível confirmar a devolução. Tente novamente.
+						{error.message.includes("409")
+							? "Este item já foi devolvido anteriormente."
+							: "Não foi possível confirmar a devolução. Tente novamente."}
 					</ThemedText>
 				) : null}
 

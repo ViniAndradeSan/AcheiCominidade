@@ -3,7 +3,7 @@ import { apiFetch } from "./client";
 
 export interface GetFoundItemsParams {
 	status?: ItemStatus;
-	categoryId?: string;
+	category?: string;
 	search?: string;
 }
 
@@ -13,7 +13,7 @@ function buildQueryString(params?: GetFoundItemsParams): string {
 	const query = new URLSearchParams();
 
 	if (params.status) query.set("status", params.status);
-	if (params.categoryId) query.set("categoryId", params.categoryId);
+	if (params.category) query.set("category", params.category);
 	if (params.search) query.set("search", params.search);
 
 	const queryString = query.toString();
