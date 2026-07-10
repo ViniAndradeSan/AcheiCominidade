@@ -15,12 +15,22 @@ import { ThemedText } from "@/components/themed-text";
 import { Spacing } from "@/constants/theme";
 import { useCategories } from "@/hooks/use-categories";
 import { useCreateFoundItem } from "@/hooks/use-create-found-item";
+import { useUpdateFoundItem } from "@/hooks/use-update-found-item";
 import { useImagePicker } from "@/hooks/use-image-picker";
 import { useLocation } from "@/hooks/use-location";
 import { useTheme } from "@/hooks/use-theme";
 import { buildPhotoDataUri } from "@/lib/upload/upload-image";
+import type { FoundItem } from "@/lib/types";
 
-export function FoundItemForm() {
+type FoundItemFormProps = {
+	mode?: "create" | "edit";
+	initialValues?: FoundItem;
+};
+
+export function FoundItemForm({
+	mode = "create",
+	initialValues,
+}: FoundItemFormProps) {
 	const router = useRouter();
 	const theme = useTheme();
 
@@ -31,6 +41,7 @@ export function FoundItemForm() {
 		pickFromGallery,
 		clear: clearImage,
 	} = useImagePicker();
+
 	const {
 		latitude,
 		longitude,
@@ -38,13 +49,28 @@ export function FoundItemForm() {
 		error: locationError,
 		captureCurrentLocation,
 	} = useLocation();
-	const { data: categories, isLoading: categoriesLoading } = useCategories();
-	const { mutate, isPending } = useCreateFoundItem();
 
-	const [title, setTitle] = useState("");
-	const [description, setDescription] = useState("");
-	const [categoryId, setCategoryId] = useState<string | null>(null);
-	const [locationText, setLocationText] = useState("");
+	const { data: categories, isLoading: categoriesLoading } =
+		useCategories();
+
+	const createMutation = useCreateFoundItem();
+    const updateMutation = useUpdateFoundItem();
+
+    const isPending =
+	mode === "edit"
+		? updateMutation.isPending
+		: createMutation.isPending;
+
+	const [title, setTitle] = useState(initialValues?.title ?? "");
+	const [description, setDescription] = useState(
+		initialValues?.description ?? "",
+	);
+	const [categoryId, setCategoryId] = useState<string | null>(
+		initialValues?.categoryId ?? null,
+	);
+	const [locationText, setLocationText] = useState(
+		initialValues?.foundLocationText ?? "",
+	);
 
 	async function handleUseCurrentLocation() {
 		const addr = await captureCurrentLocation();
@@ -54,41 +80,66 @@ export function FoundItemForm() {
 	const canSubmit =
 		title.trim().length > 0 &&
 		categoryId !== null &&
-		image !== null &&
+		(mode === "edit" || image !== null) &&
 		locationText.trim().length > 0 &&
 		!isPending;
 
 	function handleSubmit() {
-		if (!canSubmit || !image || !categoryId) return;
+		if (!canSubmit || !categoryId) return;
 
-		const photoUrl = image.base64 ? buildPhotoDataUri(image.base64) : image.uri;
+		const photoUrl =
+			image != null
+				? image.base64
+					? buildPhotoDataUri(image.base64)
+					: image.uri
+				: initialValues?.photoUrl;
 
-		mutate(
-			{
-				title: title.trim(),
-				description: description.trim() || undefined,
-				categoryId,
-				photoUrl,
-				foundLocationText: locationText.trim(),
-				foundLatitude: latitude ?? undefined,
-				foundLongitude: longitude ?? undefined,
-			},
-			{
+		const payload = {
+			title: title.trim(),
+			description: description.trim() || undefined,
+			categoryId,
+			photoUrl: photoUrl!,
+			foundLocationText: locationText.trim(),
+			foundLatitude: latitude ?? undefined,
+			foundLongitude: longitude ?? undefined,
+		};
+
+		if (mode === "edit" && initialValues) {
+			updateMutation.mutate(
+				{
+				id: initialValues.id,
+				input: payload,
+				},
+				{
+					onSuccess: () => {
+						if (
+							typeof window !== "undefined" &&
+							window.history.length > 1
+						) {
+							router.back();
+						} else {
+							router.replace("/");
+						}
+					},
+				},
+			);
+		} else {
+			createMutation.mutate(payload, {
 				onSuccess: () => {
-					// Try to go back if there's history (works on native). On web
-					// `router.back()` can emit a development warning if there's no
-					// navigator to handle GO_BACK; fallback to replacing with root.
-					if (typeof window !== "undefined" && window.history.length > 1) {
+					if (
+						typeof window !== "undefined" &&
+						window.history.length > 1
+					) {
 						router.back();
 					} else {
 						router.replace("/");
 					}
 				},
-			},
-		);
+			});
+		}
 	}
 
-	return (
+		return (
 		<ScrollView
 			contentContainerStyle={styles.container}
 			keyboardShouldPersistTaps="handled"
@@ -105,6 +156,7 @@ export function FoundItemForm() {
 				>
 					<ThemedText type="small">Câmera</ThemedText>
 				</Pressable>
+
 				<Pressable
 					onPress={pickFromGallery}
 					style={[
@@ -114,14 +166,28 @@ export function FoundItemForm() {
 				>
 					<ThemedText type="small">Galeria</ThemedText>
 				</Pressable>
+
 				{image && (
-					<Pressable onPress={clearImage} style={styles.clearButton}>
+					<Pressable
+						onPress={clearImage}
+						style={styles.clearButton}
+					>
 						<ThemedText type="small">✕</ThemedText>
 					</Pressable>
 				)}
 			</View>
 
-			{image && <Image source={{ uri: image.uri }} style={styles.preview} />}
+			{image ? (
+				<Image source={{ uri: image.uri }} style={styles.preview} />
+			) : (
+				mode === "edit" &&
+				initialValues?.photoUrl && (
+					<Image
+						source={{ uri: initialValues.photoUrl }}
+						style={styles.preview}
+					/>
+				)
+			)}
 
 			{imageError && (
 				<ThemedText type="small" style={{ color: "#E53935" }}>
@@ -130,6 +196,7 @@ export function FoundItemForm() {
 			)}
 
 			<ThemedText type="smallBold">Título</ThemedText>
+
 			<TextInput
 				value={title}
 				onChangeText={setTitle}
@@ -145,7 +212,10 @@ export function FoundItemForm() {
 				]}
 			/>
 
-			<ThemedText type="smallBold">Descrição (opcional)</ThemedText>
+			<ThemedText type="smallBold">
+				Descrição (opcional)
+			</ThemedText>
+
 			<TextInput
 				value={description}
 				onChangeText={setDescription}
@@ -165,6 +235,7 @@ export function FoundItemForm() {
 			/>
 
 			<ThemedText type="smallBold">Categoria</ThemedText>
+
 			<CategoryPicker
 				categories={categories ?? []}
 				value={categoryId}
@@ -177,7 +248,9 @@ export function FoundItemForm() {
 				onChangeText={setLocationText}
 				onUseCurrentLocation={handleUseCurrentLocation}
 				loadingLocation={locationLoading}
-				coordinatesCaptured={latitude !== null && longitude !== null}
+				coordinatesCaptured={
+					latitude !== null && longitude !== null
+				}
 			/>
 
 			{locationError && (
@@ -196,9 +269,16 @@ export function FoundItemForm() {
 				]}
 			>
 				{isPending ? (
-					<ActivityIndicator color={theme.text} size="small" />
+					<ActivityIndicator
+						color={theme.text}
+						size="small"
+					/>
 				) : (
-					<ThemedText type="smallBold">Registrar</ThemedText>
+					<ThemedText type="smallBold">
+						{mode === "edit"
+							? "Salvar alterações"
+							: "Registrar"}
+					</ThemedText>
 				)}
 			</Pressable>
 		</ScrollView>
