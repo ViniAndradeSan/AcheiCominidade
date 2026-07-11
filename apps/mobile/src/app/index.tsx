@@ -1,22 +1,28 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Pressable, ScrollView, StyleSheet } from "react-native";
+import {
+	ActivityIndicator,
+	FlatList,
+	Pressable,
+	ScrollView,
+	StyleSheet,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { CategoryChip } from "@/components/domain/category-chip";
 import { EmptyState } from "@/components/domain/empty-state";
 import { ErrorState } from "@/components/domain/error-state";
-import { LoadingState } from "@/components/domain/loading-state";
 import { ItemCard } from "@/components/domain/item-card";
+import { ItemListSkeleton } from "@/components/domain/item-card-skeleton";
 import { StatusFilterTabs } from "@/components/domain/status-filter-tabs";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Spacing } from "@/constants/theme";
 import { useCategories } from "@/hooks/use-categories";
 import { useFoundItems } from "@/hooks/use-found-items";
-import { foundItemsKeys, getFoundItems } from "@/lib/api/found-items.queries";
 import { useTheme } from "@/hooks/use-theme";
+import { foundItemsKeys, getFoundItems } from "@/lib/api/found-items.queries";
 import type { FoundItem, ItemStatus } from "@/lib/types";
 
 export default function HomeScreen() {
@@ -24,8 +30,7 @@ export default function HomeScreen() {
 	const theme = useTheme();
 
 	const [categorySlug, setCategorySlug] = useState<string | null>(null);
-	const [status, setStatus] =
-		useState<ItemStatus>("disponivel");
+	const [status, setStatus] = useState<ItemStatus>("disponivel");
 
 	const { data: categories } = useCategories();
 
@@ -43,6 +48,7 @@ export default function HomeScreen() {
 
 	const queryClient = useQueryClient();
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: prefetch só depende das combinações de filtro/categoria
 	useEffect(() => {
 		if (!categories) return;
 
@@ -78,17 +84,11 @@ export default function HomeScreen() {
 	return (
 		<ThemedView style={styles.container}>
 			<SafeAreaView style={styles.safeArea}>
-				<ThemedText
-					type="title"
-					style={styles.title}
-				>
+				<ThemedText type="title" style={styles.title}>
 					Achei Comunidade
 				</ThemedText>
 
-				<StatusFilterTabs
-					value={status}
-					onChange={setStatus}
-				/>
+				<StatusFilterTabs value={status} onChange={setStatus} />
 
 				<ScrollView
 					horizontal
@@ -106,40 +106,36 @@ export default function HomeScreen() {
 							key={c.id}
 							label={c.name}
 							selected={categorySlug === c.slug}
-							onPress={() =>
-								setCategorySlug(c.slug)
-							}
+							onPress={() => setCategorySlug(c.slug)}
 						/>
 					))}
-			</ScrollView>
+				</ScrollView>
 
-			{isFetching && !isInitialLoading && !isRefetching ? (
-				<ActivityIndicator
-					size="small"
-					color={theme.text}
-					style={styles.filterIndicator}
-				/>
-			) : null}
+				{isFetching && !isInitialLoading && !isRefetching ? (
+					<ActivityIndicator
+						size="small"
+						color={theme.text}
+						style={styles.filterIndicator}
+					/>
+				) : null}
 
-			<FlatList
+				<FlatList
 					style={{ flex: 1 }}
 					data={items}
 					keyExtractor={(item: FoundItem) => item.id}
 					renderItem={({ item }) => (
 						<ItemCard
 							item={item}
-							onPress={() =>
-								router.push(`/items/${item.id}`)
-							}
+							onPress={() => router.push(`/items/${item.id}`)}
 						/>
 					)}
 					refreshing={isRefetching}
 					onRefresh={() => refetch()}
 					contentContainerStyle={styles.list}
-				ListEmptyComponent={
-					isInitialLoading ? (
-						<LoadingState />
-					) : isError ? (
+					ListEmptyComponent={
+						isInitialLoading ? (
+							<ItemListSkeleton />
+						) : isError ? (
 							<ErrorState
 								message="Erro ao carregar itens."
 								onRetry={() => refetch()}
@@ -151,11 +147,8 @@ export default function HomeScreen() {
 									categorySlug
 										? "Nenhum item nessa categoria"
 										: `Nenhum item ${
-												status ===
-												"disponivel"
-													? "disponível"
-													: "devolvido"
-										  } encontrado`
+												status === "disponivel" ? "disponível" : "devolvido"
+											} encontrado`
 								}
 							/>
 						)
@@ -163,20 +156,15 @@ export default function HomeScreen() {
 				/>
 
 				<Pressable
-					onPress={() =>
-						router.push("/items/new")
-					}
+					onPress={() => router.push("/items/new")}
 					style={[
 						styles.fab,
 						{
-							backgroundColor:
-								theme.backgroundSelected,
+							backgroundColor: theme.backgroundSelected,
 						},
 					]}
 				>
-					<ThemedText type="smallBold">
-						+
-					</ThemedText>
+					<ThemedText type="smallBold">+</ThemedText>
 				</Pressable>
 			</SafeAreaView>
 		</ThemedView>
