@@ -16,6 +16,7 @@ import { StatusBadge } from "@/components/domain/status-badge";
 import { ThemedText } from "@/components/themed-text";
 import { Spacing } from "@/constants/theme";
 import { useDeleteFoundItem } from "@/hooks/use-delete-found-item";
+import { useUndoReturn } from "@/hooks/use-undo-return";
 import { useFoundItem } from "@/hooks/use-found-item";
 import { useTheme } from "@/hooks/use-theme";
 
@@ -27,6 +28,7 @@ export default function ItemDetailScreen() {
 	const [confirmVisible, setConfirmVisible] = useState(false);
 
 	const deleteItem = useDeleteFoundItem();
+	const undoReturn = useUndoReturn();
 
 	if (isLoading) {
 		return (
@@ -150,6 +152,25 @@ export default function ItemDetailScreen() {
 							</ThemedText>
 						</Pressable>
 					</>
+				)}
+
+				{item.status === "devolvido" && item.itemReturn && (
+					<Pressable
+						onPress={() =>
+							undoReturn.mutate(item.itemReturn!.id)
+						}
+						disabled={undoReturn.isPending}
+						style={[
+							styles.actionButton,
+							{ backgroundColor: theme.backgroundElement },
+						]}
+					>
+						<ThemedText type="smallBold">
+							{undoReturn.isPending
+								? "Revertendo..."
+								: "Voltar para disponível"}
+						</ThemedText>
+					</Pressable>
 				)}
 			</ScrollView>
 

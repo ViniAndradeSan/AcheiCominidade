@@ -13,6 +13,7 @@ export interface FoundItem {
 	categoryId: string;
 	category?: ItemCategory;
 	status: ItemStatus;
+	itemReturn?: ItemReturn | null;
 	photoUrl: string;
 	foundLocationText: string;
 	foundLatitude: number | null;

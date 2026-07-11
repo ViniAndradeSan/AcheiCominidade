@@ -18,3 +18,7 @@ export function returnItem({
 		}),
 	});
 }
+
+export function deleteItemReturn(id: string): Promise<ItemReturn> {
+	return apiFetch<ItemReturn>(`/item-returns/${id}`, { method: "DELETE" });
+}
