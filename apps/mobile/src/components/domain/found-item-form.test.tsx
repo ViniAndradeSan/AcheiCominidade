@@ -20,6 +20,10 @@ jest.mock("@/hooks/use-create-found-item", () => ({
 	useCreateFoundItem: () => ({ mutate: jest.fn(), isPending: false }),
 }));
 
+jest.mock("@/hooks/use-update-found-item", () => ({
+	useUpdateFoundItem: () => ({ mutate: jest.fn(), isPending: false }),
+}));
+
 jest.mock("@/hooks/use-image-picker", () => ({
 	useImagePicker: () => ({
 		image: null,

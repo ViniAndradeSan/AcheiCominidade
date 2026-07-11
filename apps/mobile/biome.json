@@ -2,6 +2,6 @@
 	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
 	"extends": ["@tooling/biome/mobile"],
 	"files": {
-		"includes": ["**", "!.omc", "!.expo", "!ios", "!android"]
+		"includes": ["**", "!.omc", "!.expo", "!ios", "!android", "!coverage"]
 	}
 }

@@ -46,3 +46,6 @@ example
 .turbo/
 
 .env
+
+# test coverage
+coverage/
