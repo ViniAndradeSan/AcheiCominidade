@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { FlatList, Pressable, ScrollView, StyleSheet } from "react-native";
+import { ActivityIndicator, FlatList, Pressable, ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { CategoryChip } from "@/components/domain/category-chip";
@@ -30,6 +30,7 @@ export default function HomeScreen() {
 	const {
 		data: items,
 		isLoading,
+		isFetching,
 		isError,
 		refetch,
 		isRefetching,
@@ -37,6 +38,8 @@ export default function HomeScreen() {
 		status,
 		category: categorySlug ?? undefined,
 	});
+
+	const isInitialLoading = isLoading && items === undefined;
 
 	return (
 		<ThemedView style={styles.container}>
@@ -74,9 +77,17 @@ export default function HomeScreen() {
 							}
 						/>
 					))}
-				</ScrollView>
+			</ScrollView>
 
-				<FlatList
+			{isFetching && !isInitialLoading && !isRefetching ? (
+				<ActivityIndicator
+					size="small"
+					color={theme.text}
+					style={styles.filterIndicator}
+				/>
+			) : null}
+
+			<FlatList
 					style={{ flex: 1 }}
 					data={items}
 					keyExtractor={(item: FoundItem) => item.id}
@@ -91,10 +102,10 @@ export default function HomeScreen() {
 					refreshing={isRefetching}
 					onRefresh={() => refetch()}
 					contentContainerStyle={styles.list}
-					ListEmptyComponent={
-						isLoading ? (
-							<LoadingState />
-						) : isError ? (
+				ListEmptyComponent={
+					isInitialLoading ? (
+						<LoadingState />
+					) : isError ? (
 							<ErrorState
 								message="Erro ao carregar itens."
 								onRetry={() => refetch()}
@@ -160,6 +171,10 @@ const styles = StyleSheet.create({
 
 	list: {
 		flexGrow: 1,
+	},
+
+	filterIndicator: {
+		paddingVertical: Spacing.two,
 	},
 
 	fab: {

@@ -1,0 +1,6 @@
+node_modules\@tanstack\react-query\build\legacy\index.d.ts:67:export { keepPreviousData } from './_tsup-dts-rollup.js';
+node_modules\@tanstack\react-query\build\legacy\_tsup-dts-rollup.d.ts:56:import { keepPreviousData } from '@tanstack/query-core';
+node_modules\@tanstack\react-query\build\legacy\_tsup-dts-rollup.d.ts:421:export { keepPreviousData }
+node_modules\@tanstack\react-query\build\modern\index.d.ts:67:export { keepPreviousData } from './_tsup-dts-rollup.js';
+node_modules\@tanstack\react-query\build\modern\_tsup-dts-rollup.d.ts:56:import { keepPreviousData } from '@tanstack/query-core';
+node_modules\@tanstack\react-query\build\modern\_tsup-dts-rollup.d.ts:421:export { keepPreviousData }
