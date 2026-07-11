@@ -1,5 +1,6 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Pressable, ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -14,6 +15,7 @@ import { ThemedView } from "@/components/themed-view";
 import { Spacing } from "@/constants/theme";
 import { useCategories } from "@/hooks/use-categories";
 import { useFoundItems } from "@/hooks/use-found-items";
+import { foundItemsKeys, getFoundItems } from "@/lib/api/found-items.queries";
 import { useTheme } from "@/hooks/use-theme";
 import type { FoundItem, ItemStatus } from "@/lib/types";
 
@@ -38,6 +40,38 @@ export default function HomeScreen() {
 		status,
 		category: categorySlug ?? undefined,
 	});
+
+	const queryClient = useQueryClient();
+
+	useEffect(() => {
+		if (!categories) return;
+
+		const otherStatus: ItemStatus =
+			status === "disponivel" ? "devolvido" : "disponivel";
+
+		queryClient.prefetchQuery({
+			queryKey: foundItemsKeys.list({
+				status: otherStatus,
+				category: categorySlug ?? undefined,
+			}),
+			queryFn: () =>
+				getFoundItems({
+					status: otherStatus,
+					category: categorySlug ?? undefined,
+				}),
+			staleTime: 60_000,
+		});
+
+		for (const c of categories) {
+			if (c.slug === categorySlug) continue;
+			queryClient.prefetchQuery({
+				queryKey: foundItemsKeys.list({ status, category: c.slug }),
+				queryFn: () => getFoundItems({ status, category: c.slug }),
+				staleTime: 60_000,
+			});
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [categories, status, categorySlug]);
 
 	const isInitialLoading = isLoading && items === undefined;
 

@@ -12,5 +12,6 @@ export function useFoundItems(filters: GetFoundItemsParams = {}) {
 		queryKey: foundItemsKeys.list(filters),
 		queryFn: () => getFoundItems(filters),
 		placeholderData: keepPreviousData,
+		staleTime: 60_000, // 1 min
 	});
 }
