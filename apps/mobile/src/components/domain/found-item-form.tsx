@@ -15,12 +15,12 @@ import { ThemedText } from "@/components/themed-text";
 import { Spacing } from "@/constants/theme";
 import { useCategories } from "@/hooks/use-categories";
 import { useCreateFoundItem } from "@/hooks/use-create-found-item";
-import { useUpdateFoundItem } from "@/hooks/use-update-found-item";
 import { useImagePicker } from "@/hooks/use-image-picker";
 import { useLocation } from "@/hooks/use-location";
 import { useTheme } from "@/hooks/use-theme";
-import { buildPhotoDataUri } from "@/lib/upload/upload-image";
+import { useUpdateFoundItem } from "@/hooks/use-update-found-item";
 import type { FoundItem } from "@/lib/types";
+import { buildPhotoDataUri } from "@/lib/upload/upload-image";
 
 type FoundItemFormProps = {
 	mode?: "create" | "edit";
@@ -50,16 +50,13 @@ export function FoundItemForm({
 		captureCurrentLocation,
 	} = useLocation();
 
-	const { data: categories, isLoading: categoriesLoading } =
-		useCategories();
+	const { data: categories, isLoading: categoriesLoading } = useCategories();
 
 	const createMutation = useCreateFoundItem();
-    const updateMutation = useUpdateFoundItem();
+	const updateMutation = useUpdateFoundItem();
 
-    const isPending =
-	mode === "edit"
-		? updateMutation.isPending
-		: createMutation.isPending;
+	const isPending =
+		mode === "edit" ? updateMutation.isPending : createMutation.isPending;
 
 	const [title, setTitle] = useState(initialValues?.title ?? "");
 	const [description, setDescription] = useState(
@@ -107,15 +104,12 @@ export function FoundItemForm({
 		if (mode === "edit" && initialValues) {
 			updateMutation.mutate(
 				{
-				id: initialValues.id,
-				input: payload,
+					id: initialValues.id,
+					input: payload,
 				},
 				{
 					onSuccess: () => {
-						if (
-							typeof window !== "undefined" &&
-							window.history.length > 1
-						) {
+						if (typeof window !== "undefined" && window.history.length > 1) {
 							router.back();
 						} else {
 							router.replace("/");
@@ -126,10 +120,7 @@ export function FoundItemForm({
 		} else {
 			createMutation.mutate(payload, {
 				onSuccess: () => {
-					if (
-						typeof window !== "undefined" &&
-						window.history.length > 1
-					) {
+					if (typeof window !== "undefined" && window.history.length > 1) {
 						router.back();
 					} else {
 						router.replace("/");
@@ -139,7 +130,7 @@ export function FoundItemForm({
 		}
 	}
 
-		return (
+	return (
 		<ScrollView
 			contentContainerStyle={styles.container}
 			keyboardShouldPersistTaps="handled"
@@ -168,10 +159,7 @@ export function FoundItemForm({
 				</Pressable>
 
 				{image && (
-					<Pressable
-						onPress={clearImage}
-						style={styles.clearButton}
-					>
+					<Pressable onPress={clearImage} style={styles.clearButton}>
 						<ThemedText type="small">✕</ThemedText>
 					</Pressable>
 				)}
@@ -212,9 +200,7 @@ export function FoundItemForm({
 				]}
 			/>
 
-			<ThemedText type="smallBold">
-				Descrição (opcional)
-			</ThemedText>
+			<ThemedText type="smallBold">Descrição (opcional)</ThemedText>
 
 			<TextInput
 				value={description}
@@ -248,9 +234,7 @@ export function FoundItemForm({
 				onChangeText={setLocationText}
 				onUseCurrentLocation={handleUseCurrentLocation}
 				loadingLocation={locationLoading}
-				coordinatesCaptured={
-					latitude !== null && longitude !== null
-				}
+				coordinatesCaptured={latitude !== null && longitude !== null}
 			/>
 
 			{locationError && (
@@ -269,15 +253,10 @@ export function FoundItemForm({
 				]}
 			>
 				{isPending ? (
-					<ActivityIndicator
-						color={theme.text}
-						size="small"
-					/>
+					<ActivityIndicator color={theme.text} size="small" />
 				) : (
 					<ThemedText type="smallBold">
-						{mode === "edit"
-							? "Salvar alterações"
-							: "Registrar"}
+						{mode === "edit" ? "Salvar alterações" : "Registrar"}
 					</ThemedText>
 				)}
 			</Pressable>

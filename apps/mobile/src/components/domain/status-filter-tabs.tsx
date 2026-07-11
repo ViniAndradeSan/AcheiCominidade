@@ -7,42 +7,25 @@ type StatusFilterTabsProps = {
 	onChange: (status: Status) => void;
 };
 
-export function StatusFilterTabs({
-	value,
-	onChange,
-}: StatusFilterTabsProps) {
+export function StatusFilterTabs({ value, onChange }: StatusFilterTabsProps) {
 	return (
 		<View style={styles.container}>
 			<Pressable
-				style={[
-					styles.tab,
-					value === "disponivel" && styles.activeTab,
-				]}
+				style={[styles.tab, value === "disponivel" && styles.activeTab]}
 				onPress={() => onChange("disponivel")}
 			>
 				<Text
-					style={[
-						styles.text,
-						value === "disponivel" && styles.activeText,
-					]}
+					style={[styles.text, value === "disponivel" && styles.activeText]}
 				>
 					Disponíveis
 				</Text>
 			</Pressable>
 
 			<Pressable
-				style={[
-					styles.tab,
-					value === "devolvido" && styles.activeTab,
-				]}
+				style={[styles.tab, value === "devolvido" && styles.activeTab]}
 				onPress={() => onChange("devolvido")}
 			>
-				<Text
-					style={[
-						styles.text,
-						value === "devolvido" && styles.activeText,
-					]}
-				>
+				<Text style={[styles.text, value === "devolvido" && styles.activeText]}>
 					Devolvidos
 				</Text>
 			</Pressable>
