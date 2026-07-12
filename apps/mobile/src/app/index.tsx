@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "expo-router";
+import { useRouter, Stack } from "expo-router";
 import { useEffect, useState } from "react";
 import {
 	ActivityIndicator,
@@ -84,9 +84,7 @@ export default function HomeScreen() {
 	return (
 		<ThemedView style={styles.container}>
 			<SafeAreaView style={styles.safeArea}>
-				<ThemedText type="title" style={styles.title}>
-					Achei Comunidade
-				</ThemedText>
+				<Stack.Screen options={{ title: "Achei Comunidade" }} />
 
 				<StatusFilterTabs value={status} onChange={setStatus} />
 
