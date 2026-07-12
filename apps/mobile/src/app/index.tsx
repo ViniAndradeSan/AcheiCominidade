@@ -16,7 +16,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { CategoryChip } from "@/components/domain/category-chip";
 import { EmptyState } from "@/components/domain/empty-state";
-import { ErrorState } from "@/components/domain/error-state";
+import { ErrorState, getErrorMessage } from "@/components/domain/error-state";
 import { ItemCard } from "@/components/domain/item-card";
 import { ItemListSkeleton } from "@/components/domain/item-card-skeleton";
 import { StatusFilterTabs } from "@/components/domain/status-filter-tabs";
@@ -42,6 +42,7 @@ export default function HomeScreen() {
 		isLoading,
 		isFetching,
 		isError,
+		error,
 		refetch,
 		isRefetching,
 	} = useFoundItems({
@@ -140,7 +141,7 @@ export default function HomeScreen() {
 							<ItemListSkeleton />
 						) : isError ? (
 							<ErrorState
-								message="Erro ao carregar itens."
+								message={getErrorMessage(error, "Erro ao carregar itens.")}
 								onRetry={() => refetch()}
 							/>
 						) : (

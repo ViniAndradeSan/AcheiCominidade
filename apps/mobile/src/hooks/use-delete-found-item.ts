@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Alert } from "react-native";
 import { deleteFoundItem } from "@/lib/api/found-items.mutations";
 import { foundItemsKeys } from "@/lib/api/found-items.queries";
+import { NetworkError } from "@/lib/api/client";
 import type { FoundItem } from "@/lib/types";
 
 export function useDeleteFoundItem() {
@@ -22,7 +24,14 @@ export function useDeleteFoundItem() {
 
 			return { previous };
 		},
-		onError: (_err, _id, context) => {
+		onError: (err: unknown, _id, context) => {
+			if (err instanceof NetworkError) {
+				Alert.alert(
+					"Sem conexão",
+					"Não foi possível salvar. Verifique sua internet e tente novamente.",
+				);
+			}
+
 			if (context?.previous) {
 				for (const [key, data] of context.previous) {
 					queryClient.setQueryData(key, data);

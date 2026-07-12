@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 
 import { ConfirmDialog } from "@/components/domain/confirm-dialog";
-import { ErrorState } from "@/components/domain/error-state";
+import { ErrorState, getErrorMessage } from "@/components/domain/error-state";
 import { ItemPhoto } from "@/components/domain/item-photo";
 import { LoadingState } from "@/components/domain/loading-state";
 import { StatusBadge } from "@/components/domain/status-badge";
@@ -20,7 +20,7 @@ import { useUndoReturn } from "@/hooks/use-undo-return";
 
 export default function ItemDetailScreen() {
 	const { id } = useLocalSearchParams<{ id: string }>();
-	const { data: item, isLoading, isError, refetch } = useFoundItem(id);
+	const { data: item, isLoading, isError, error, refetch } = useFoundItem(id);
 	const theme = useTheme();
 
 	const [confirmVisible, setConfirmVisible] = useState(false);
@@ -39,7 +39,10 @@ export default function ItemDetailScreen() {
 	if (isError || !item) {
 		return (
 			<Screen style={styles.center}>
-				<ErrorState message="Item não encontrado." onRetry={() => refetch()} />
+				<ErrorState
+					message={getErrorMessage(error, "Item não encontrado.")}
+					onRetry={() => refetch()}
+				/>
 			</Screen>
 		);
 	}

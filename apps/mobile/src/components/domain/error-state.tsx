@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { Pressable, StyleSheet, View } from "react-native";
 
+import { NetworkError } from "@/lib/api/client";
 import { ThemedText } from "@/components/themed-text";
 import { Radius, Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
@@ -9,6 +10,17 @@ type ErrorStateProps = {
 	message?: string;
 	onRetry?: () => void;
 };
+
+export function getErrorMessage(
+	error: unknown,
+	defaultMessage = "Algo deu errado.",
+) {
+	if (error instanceof NetworkError) {
+		return "Não foi possível conectar ao servidor. Verifique sua internet e tente novamente.";
+	}
+
+	return defaultMessage;
+}
 
 export function ErrorState({
 	message = "Algo deu errado.",

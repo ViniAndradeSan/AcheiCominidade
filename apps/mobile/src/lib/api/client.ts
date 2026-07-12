@@ -39,6 +39,12 @@ export class ApiError extends Error {
 	}
 }
 
+export class NetworkError extends Error {
+	constructor() {
+		super("Network request failed");
+	}
+}
+
 export async function apiFetch<T>(
 	path: string,
 	options: RequestInit = {},
@@ -74,7 +80,7 @@ export async function apiFetch<T>(
 		if (err instanceof DOMException && err.name === "AbortError") {
 			throw new ApiError(0, "Request timed out");
 		}
-		throw err;
+		throw new NetworkError();
 	} finally {
 		clearTimeout(timeout);
 	}

@@ -4,7 +4,7 @@ import { onlineManager } from "@tanstack/react-query";
 export function setupReactQueryOnlineManager() {
 	return onlineManager.setEventListener((setOnline) => {
 		return NetInfo.addEventListener((state) => {
-			setOnline(!!state.isConnected);
+			setOnline(Boolean(state.isConnected && state.isInternetReachable));
 		});
 	});
 }
