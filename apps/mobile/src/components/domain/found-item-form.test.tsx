@@ -70,7 +70,7 @@ describe("FoundItemForm — preenchimento de localizacao", () => {
 
 		expect(locationInput.props.value).toBe("");
 
-		fireEvent.press(screen.getByText("📍"));
+		fireEvent.press(screen.getByA11yLabel("use-current-location"));
 
 		await waitFor(() =>
 			expect(locationInput.props.value).toBe("Rua das Flores, 123"),

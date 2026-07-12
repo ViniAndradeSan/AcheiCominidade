@@ -5,8 +5,9 @@ import {
 	TextInput,
 	View,
 } from "react-native";
+import { Feather } from "@expo/vector-icons";
 import { ThemedText } from "@/components/themed-text";
-import { Spacing } from "@/constants/theme";
+import { Spacing, Radius } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 
 export type LocationFieldProps = {
@@ -47,6 +48,7 @@ export function LocationField({
 				/>
 
 				<Pressable
+					accessibilityLabel="use-current-location"
 					onPress={onUseCurrentLocation}
 					disabled={loadingLocation}
 					style={[
@@ -57,14 +59,14 @@ export function LocationField({
 					{loadingLocation ? (
 						<ActivityIndicator size="small" color={theme.text} />
 					) : (
-						<ThemedText type="small">📍</ThemedText>
+						<Feather name="map-pin" size={18} color={theme.text} />
 					)}
 				</Pressable>
 			</View>
 
 			{coordinatesCaptured && (
 				<ThemedText type="small" style={styles.captured}>
-					📍 Coordenada capturada
+					Coordenada capturada
 				</ThemedText>
 			)}
 		</View>
@@ -83,7 +85,7 @@ const styles = StyleSheet.create({
 	input: {
 		flex: 1,
 		borderWidth: 1,
-		borderRadius: Spacing.two,
+		borderRadius: Radius.md,
 		paddingHorizontal: Spacing.three,
 		paddingVertical: Spacing.two,
 		fontSize: 16,
@@ -91,7 +93,7 @@ const styles = StyleSheet.create({
 	gpsButton: {
 		width: 48,
 		height: 48,
-		borderRadius: Spacing.two,
+		borderRadius: Radius.md,
 		alignItems: "center",
 		justifyContent: "center",
 	},

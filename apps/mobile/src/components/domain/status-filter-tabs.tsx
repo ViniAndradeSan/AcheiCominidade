@@ -1,4 +1,7 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
+import { ThemedText } from "@/components/themed-text";
+import { Spacing, Radius } from "@/constants/theme";
+import { useTheme } from "@/hooks/use-theme";
 
 type Status = "disponivel" | "devolvido";
 
@@ -8,26 +11,51 @@ type StatusFilterTabsProps = {
 };
 
 export function StatusFilterTabs({ value, onChange }: StatusFilterTabsProps) {
+	const theme = useTheme();
+
 	return (
-		<View style={styles.container}>
+		<View
+			style={[
+				styles.container,
+				{ backgroundColor: theme.backgroundElement, borderRadius: Radius.md },
+			]}
+		>
 			<Pressable
-				style={[styles.tab, value === "disponivel" && styles.activeTab]}
 				onPress={() => onChange("disponivel")}
+				style={({ pressed }) => [
+					styles.tab,
+					{
+						backgroundColor:
+							value === "disponivel" ? theme.primary : "transparent",
+						opacity: pressed ? 0.85 : 1,
+					},
+				]}
 			>
-				<Text
-					style={[styles.text, value === "disponivel" && styles.activeText]}
+				<ThemedText
+					type={value === "disponivel" ? "smallBold" : "small"}
+					style={{ color: value === "disponivel" ? theme.primaryText : theme.text }}
 				>
 					Disponíveis
-				</Text>
+				</ThemedText>
 			</Pressable>
 
 			<Pressable
-				style={[styles.tab, value === "devolvido" && styles.activeTab]}
 				onPress={() => onChange("devolvido")}
+				style={({ pressed }) => [
+					styles.tab,
+					{
+						backgroundColor:
+							value === "devolvido" ? theme.primary : "transparent",
+						opacity: pressed ? 0.85 : 1,
+					},
+				]}
 			>
-				<Text style={[styles.text, value === "devolvido" && styles.activeText]}>
+				<ThemedText
+					type={value === "devolvido" ? "smallBold" : "small"}
+					style={{ color: value === "devolvido" ? theme.primaryText : theme.text }}
+				>
 					Devolvidos
-				</Text>
+				</ThemedText>
 			</Pressable>
 		</View>
 	);
@@ -36,28 +64,14 @@ export function StatusFilterTabs({ value, onChange }: StatusFilterTabsProps) {
 const styles = StyleSheet.create({
 	container: {
 		flexDirection: "row",
-		marginVertical: 12,
-		borderRadius: 8,
+		marginVertical: Spacing.two,
 		overflow: "hidden",
 	},
 
 	tab: {
 		flex: 1,
-		paddingVertical: 10,
+		paddingVertical: Spacing.two,
 		alignItems: "center",
-		backgroundColor: "#E5E7EB",
-	},
-
-	activeTab: {
-		backgroundColor: "#2563EB",
-	},
-
-	text: {
-		fontWeight: "600",
-		color: "#374151",
-	},
-
-	activeText: {
-		color: "#FFFFFF",
+		justifyContent: "center",
 	},
 });

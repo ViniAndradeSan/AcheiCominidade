@@ -1,6 +1,6 @@
 import { Pressable, type PressableProps, StyleSheet } from "react-native";
 import { ThemedText } from "@/components/themed-text";
-import { Spacing } from "@/constants/theme";
+import { Spacing, Radius } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 
 export type CategoryChipProps = {
@@ -33,6 +33,6 @@ const styles = StyleSheet.create({
 	chip: {
 		paddingHorizontal: Spacing.three,
 		paddingVertical: Spacing.two,
-		borderRadius: Spacing.four,
+		borderRadius: Radius.md,
 	},
 });

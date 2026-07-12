@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import { Spacing } from "@/constants/theme";
+import { Spacing, Radius } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 
 export function ItemCardSkeleton() {
@@ -50,10 +50,10 @@ export function ItemListSkeleton({ count = 6 }: { count?: number }) {
 
 const styles = StyleSheet.create({
 	card: { flexDirection: "row", gap: Spacing.three, padding: Spacing.three },
-	photo: { width: 64, height: 64, borderRadius: Spacing.two },
+	photo: { width: 64, height: 64, borderRadius: Radius.md },
 	content: { flex: 1, justifyContent: "center", gap: Spacing.two },
 	line: { height: 12, borderRadius: 4 },
 	lineWide: { width: "80%" },
-	lineChip: { width: "40%", height: 20, borderRadius: Spacing.four },
+	lineChip: { width: "40%", height: 20, borderRadius: Radius.md },
 	lineNarrow: { width: "60%" },
 });

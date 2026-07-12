@@ -19,6 +19,8 @@ import { useDeleteFoundItem } from "@/hooks/use-delete-found-item";
 import { useFoundItem } from "@/hooks/use-found-item";
 import { useTheme } from "@/hooks/use-theme";
 import { useUndoReturn } from "@/hooks/use-undo-return";
+import { Feather } from "@expo/vector-icons";
+import { Radius } from "@/constants/theme";
 
 export default function ItemDetailScreen() {
 	const { id } = useLocalSearchParams<{ id: string }>();
@@ -78,7 +80,7 @@ export default function ItemDetailScreen() {
 
 				{item.foundLatitude !== null && item.foundLongitude !== null ? (
 					<ThemedText type="small">
-						📍 {item.foundLatitude.toFixed(5)}, {item.foundLongitude.toFixed(5)}
+						<Feather name="map-pin" size={14} color={theme.text} /> {item.foundLatitude.toFixed(5)}, {item.foundLongitude.toFixed(5)}
 					</ThemedText>
 				) : null}
 
@@ -110,9 +112,12 @@ export default function ItemDetailScreen() {
 
 						<Pressable
 							onPress={() => setConfirmVisible(true)}
-							style={[styles.actionButton, styles.deleteButton]}
+							style={[
+								styles.actionButton,
+								{ backgroundColor: theme.danger },
+							]}
 						>
-							<ThemedText type="smallBold" style={{ color: "#fff" }}>
+							<ThemedText type="smallBold" style={{ color: theme.primaryText }}>
 								Deletar item
 							</ThemedText>
 						</Pressable>
@@ -192,11 +197,7 @@ const styles = StyleSheet.create({
 	actionButton: {
 		marginTop: Spacing.two,
 		paddingVertical: Spacing.three,
-		borderRadius: Spacing.four,
+		borderRadius: Radius.md,
 		alignItems: "center",
-	},
-
-	deleteButton: {
-		backgroundColor: "#DC2626",
 	},
 });

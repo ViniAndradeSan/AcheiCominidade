@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
-import { Spacing } from "@/constants/theme";
+import { Spacing, Radius } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 
 type ErrorStateProps = {
@@ -50,6 +50,6 @@ const styles = StyleSheet.create({
 	retryButton: {
 		paddingHorizontal: Spacing.four,
 		paddingVertical: Spacing.two,
-		borderRadius: Spacing.two,
+		borderRadius: Radius.md,
 	},
 });
