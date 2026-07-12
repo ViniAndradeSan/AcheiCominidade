@@ -1,6 +1,13 @@
+import { useEffect } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
+import Animated, {
+	useSharedValue,
+	withTiming,
+	useAnimatedStyle,
+} from "react-native-reanimated";
+
 import { ThemedText } from "@/components/themed-text";
-import { Spacing, Radius } from "@/constants/theme";
+import { Radius, Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 
 type Status = "disponivel" | "devolvido";
@@ -10,8 +17,21 @@ type StatusFilterTabsProps = {
 	onChange: (status: Status) => void;
 };
 
+const TAB_COUNT = 2;
+
 export function StatusFilterTabs({ value, onChange }: StatusFilterTabsProps) {
 	const theme = useTheme();
+	const translateX = useSharedValue(value === "disponivel" ? 0 : 1);
+
+	useEffect(() => {
+		translateX.value = withTiming(value === "disponivel" ? 0 : 1, {
+			duration: 200,
+		});
+	}, [value, translateX]);
+
+	const pillStyle = useAnimatedStyle(() => ({
+		transform: [{ translateX: `${translateX.value * 100}%` }],
+	}));
 
 	return (
 		<View
@@ -20,16 +40,17 @@ export function StatusFilterTabs({ value, onChange }: StatusFilterTabsProps) {
 				{ backgroundColor: theme.backgroundElement, borderRadius: Radius.md },
 			]}
 		>
+			<Animated.View
+				style={[
+					styles.pill,
+					pillStyle,
+					{ backgroundColor: theme.primary, borderRadius: Radius.md },
+				]}
+			/>
+
 			<Pressable
 				onPress={() => onChange("disponivel")}
-				style={({ pressed }) => [
-					styles.tab,
-					{
-						backgroundColor:
-							value === "disponivel" ? theme.primary : "transparent",
-						opacity: pressed ? 0.85 : 1,
-					},
-				]}
+				style={styles.tab}
 			>
 				<ThemedText
 					type={value === "disponivel" ? "smallBold" : "small"}
@@ -41,14 +62,7 @@ export function StatusFilterTabs({ value, onChange }: StatusFilterTabsProps) {
 
 			<Pressable
 				onPress={() => onChange("devolvido")}
-				style={({ pressed }) => [
-					styles.tab,
-					{
-						backgroundColor:
-							value === "devolvido" ? theme.primary : "transparent",
-						opacity: pressed ? 0.85 : 1,
-					},
-				]}
+				style={styles.tab}
 			>
 				<ThemedText
 					type={value === "devolvido" ? "smallBold" : "small"}
@@ -65,7 +79,11 @@ const styles = StyleSheet.create({
 	container: {
 		flexDirection: "row",
 		marginVertical: Spacing.two,
-		overflow: "hidden",
+	},
+
+	pill: {
+		...StyleSheet.absoluteFillObject,
+		width: `${100 / TAB_COUNT}%`,
 	},
 
 	tab: {

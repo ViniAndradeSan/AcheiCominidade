@@ -1,5 +1,5 @@
 import { Feather } from "@expo/vector-icons";
-import { Pressable, type PressableProps, StyleSheet, View } from "react-native";
+import { Pressable, type PressableProps, StyleSheet } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { Radius, Spacing } from "@/constants/theme";
