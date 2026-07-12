@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
 	},
 
 	fabGlass: {
-		...StyleSheet.absoluteFillObject,
+		...StyleSheet.absoluteFill,
 		borderRadius: 28,
 	},
 
