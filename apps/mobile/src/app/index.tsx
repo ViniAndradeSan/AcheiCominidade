@@ -68,7 +68,7 @@ export default function HomeScreen() {
 					status: otherStatus,
 					category: categorySlug ?? undefined,
 				}),
-			staleTime: 60_000,
+			staleTime: 15_000,
 		});
 
 		for (const c of categories) {
@@ -76,7 +76,7 @@ export default function HomeScreen() {
 			queryClient.prefetchQuery({
 				queryKey: foundItemsKeys.list({ status, category: c.slug }),
 				queryFn: () => getFoundItems({ status, category: c.slug }),
-				staleTime: 60_000,
+				staleTime: 15_000,
 			});
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps

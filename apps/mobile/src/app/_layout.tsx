@@ -3,6 +3,9 @@ import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persi
 import { QueryClient } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { Stack } from "expo-router";
+import { useEffect } from "react";
+import { useReactQueryFocusManager } from "@/lib/query/focus-manager";
+import { setupReactQueryOnlineManager } from "@/lib/query/online-manager";
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -18,6 +21,12 @@ const queryClient = new QueryClient({
 const persister = createAsyncStoragePersister({ storage: AsyncStorage });
 
 export default function RootLayout() {
+	useReactQueryFocusManager();
+
+	useEffect(() => {
+		setupReactQueryOnlineManager();
+	}, []);
+
 	return (
 		<PersistQueryClientProvider
 			client={queryClient}
