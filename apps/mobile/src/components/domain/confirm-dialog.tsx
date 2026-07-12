@@ -44,9 +44,7 @@ export function ConfirmDialog({
 							style={[styles.button, styles.confirmButton]}
 							onPress={onConfirm}
 						>
-							<Text style={styles.confirmText}>
-								{confirmText}
-							</Text>
+							<Text style={styles.confirmText}>{confirmText}</Text>
 						</Pressable>
 					</View>
 				</View>

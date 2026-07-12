@@ -1,9 +1,8 @@
 import { Stack, useLocalSearchParams } from "expo-router";
 import { SafeAreaView, StyleSheet } from "react-native";
-
+import { ErrorState } from "@/components/domain/error-state";
 import { FoundItemForm } from "@/components/domain/found-item-form";
 import { LoadingState } from "@/components/domain/loading-state";
-import { ErrorState } from "@/components/domain/error-state";
 import { useFoundItem } from "@/hooks/use-found-item";
 
 export default function UpdateFoundItemScreen() {
@@ -16,11 +15,7 @@ export default function UpdateFoundItemScreen() {
 	}
 
 	if (isError || !item) {
-		return (
-			<ErrorState
-				message="Item não encontrado."
-			/>
-		);
+		return <ErrorState message="Item não encontrado." />;
 	}
 
 	return (
@@ -31,10 +26,7 @@ export default function UpdateFoundItemScreen() {
 				}}
 			/>
 
-			<FoundItemForm
-				mode="edit"
-				initialValues={item}
-			/>
+			<FoundItemForm mode="edit" initialValues={item} />
 		</>
 	);
 }

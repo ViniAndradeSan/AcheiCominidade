@@ -6,8 +6,7 @@ export function useUndoReturn() {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: (itemReturnId: string) =>
-			deleteItemReturn(itemReturnId),
+		mutationFn: (itemReturnId: string) => deleteItemReturn(itemReturnId),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: foundItemsKeys.all,

@@ -1,4 +1,9 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react-native";
+import {
+	fireEvent,
+	render,
+	screen,
+	waitFor,
+} from "@testing-library/react-native";
 
 jest.mock("@/hooks/use-theme", () => ({
 	useTheme: () => ({
@@ -18,6 +23,10 @@ jest.mock("@/hooks/use-categories", () => ({
 
 jest.mock("@/hooks/use-create-found-item", () => ({
 	useCreateFoundItem: () => ({ mutate: jest.fn(), isPending: false }),
+}));
+
+jest.mock("@/hooks/use-update-found-item", () => ({
+	useUpdateFoundItem: () => ({ mutate: jest.fn(), isPending: false }),
 }));
 
 jest.mock("@/hooks/use-image-picker", () => ({

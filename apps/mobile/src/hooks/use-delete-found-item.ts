@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { foundItemsKeys } from "@/lib/api/found-items.queries";
 import { deleteFoundItem } from "@/lib/api/found-items.mutations";
+import { foundItemsKeys } from "@/lib/api/found-items.queries";
 import type { FoundItem } from "@/lib/types";
 
 export function useDeleteFoundItem() {
@@ -10,11 +10,14 @@ export function useDeleteFoundItem() {
 		mutationFn: (id: string) => deleteFoundItem(id),
 		onMutate: async (id) => {
 			await queryClient.cancelQueries({ queryKey: foundItemsKeys.all });
-			const previous = queryClient.getQueriesData({ queryKey: foundItemsKeys.all });
+			const previous = queryClient.getQueriesData({
+				queryKey: foundItemsKeys.all,
+			});
 
 			queryClient.setQueriesData<FoundItem[]>(
 				{ queryKey: foundItemsKeys.all },
-				(old) => (Array.isArray(old) ? old.filter((item) => item.id !== id) : old),
+				(old) =>
+					Array.isArray(old) ? old.filter((item) => item.id !== id) : old,
 			);
 
 			return { previous };

@@ -16,9 +16,9 @@ import { StatusBadge } from "@/components/domain/status-badge";
 import { ThemedText } from "@/components/themed-text";
 import { Spacing } from "@/constants/theme";
 import { useDeleteFoundItem } from "@/hooks/use-delete-found-item";
-import { useUndoReturn } from "@/hooks/use-undo-return";
 import { useFoundItem } from "@/hooks/use-found-item";
 import { useTheme } from "@/hooks/use-theme";
+import { useUndoReturn } from "@/hooks/use-undo-return";
 
 export default function ItemDetailScreen() {
 	const { id } = useLocalSearchParams<{ id: string }>();
@@ -41,10 +41,7 @@ export default function ItemDetailScreen() {
 	if (isError || !item) {
 		return (
 			<SafeAreaView style={styles.center}>
-				<ErrorState
-					message="Item não encontrado."
-					onRetry={() => refetch()}
-				/>
+				<ErrorState message="Item não encontrado." onRetry={() => refetch()} />
 			</SafeAreaView>
 		);
 	}
@@ -66,88 +63,56 @@ export default function ItemDetailScreen() {
 				</View>
 
 				{item.description ? (
-					<ThemedText type="default">
-						{item.description}
-					</ThemedText>
+					<ThemedText type="default">{item.description}</ThemedText>
 				) : null}
 
 				<View style={styles.row}>
-					<ThemedText type="smallBold">
-						Categoria:
-					</ThemedText>
-					<ThemedText type="small">
-						{" "}
-						{item.category?.name ?? "—"}
-					</ThemedText>
+					<ThemedText type="smallBold">Categoria:</ThemedText>
+					<ThemedText type="small"> {item.category?.name ?? "—"}</ThemedText>
 				</View>
 
 				<View style={styles.row}>
-					<ThemedText type="smallBold">
-						Local:
-					</ThemedText>
-					<ThemedText type="small">
-						{" "}
-						{item.foundLocationText}
-					</ThemedText>
+					<ThemedText type="smallBold">Local:</ThemedText>
+					<ThemedText type="small"> {item.foundLocationText}</ThemedText>
 				</View>
 
-				{item.foundLatitude !== null &&
-				item.foundLongitude !== null ? (
+				{item.foundLatitude !== null && item.foundLongitude !== null ? (
 					<ThemedText type="small">
-						📍 {item.foundLatitude.toFixed(5)},{" "}
-						{item.foundLongitude.toFixed(5)}
+						📍 {item.foundLatitude.toFixed(5)}, {item.foundLongitude.toFixed(5)}
 					</ThemedText>
 				) : null}
 
 				{item.status === "disponivel" && (
 					<>
 						<Pressable
-							onPress={() =>
-								router.push(`/items/${id}/edit`)
-							}
+							onPress={() => router.push(`/items/${id}/edit`)}
 							style={[
 								styles.actionButton,
 								{
-									backgroundColor:
-										theme.backgroundSelected,
+									backgroundColor: theme.backgroundSelected,
 								},
 							]}
 						>
-							<ThemedText type="smallBold">
-								Marcar como devolvido
-							</ThemedText>
+							<ThemedText type="smallBold">Marcar como devolvido</ThemedText>
 						</Pressable>
 
 						<Pressable
-							onPress={() =>
-								router.push(`/items/${id}/update`)
-							}
+							onPress={() => router.push(`/items/${id}/update`)}
 							style={[
 								styles.actionButton,
 								{
-									backgroundColor:
-										theme.backgroundElement,
+									backgroundColor: theme.backgroundElement,
 								},
 							]}
 						>
-							<ThemedText type="smallBold">
-								Editar item
-							</ThemedText>
+							<ThemedText type="smallBold">Editar item</ThemedText>
 						</Pressable>
 
 						<Pressable
-							onPress={() =>
-								setConfirmVisible(true)
-							}
-							style={[
-								styles.actionButton,
-								styles.deleteButton,
-							]}
+							onPress={() => setConfirmVisible(true)}
+							style={[styles.actionButton, styles.deleteButton]}
 						>
-							<ThemedText
-								type="smallBold"
-								style={{ color: "#fff" }}
-							>
+							<ThemedText type="smallBold" style={{ color: "#fff" }}>
 								Deletar item
 							</ThemedText>
 						</Pressable>
@@ -156,9 +121,7 @@ export default function ItemDetailScreen() {
 
 				{item.status === "devolvido" && item.itemReturn && (
 					<Pressable
-						onPress={() =>
-							undoReturn.mutate(item.itemReturn!.id)
-						}
+						onPress={() => undoReturn.mutate(item.itemReturn!.id)}
 						disabled={undoReturn.isPending}
 						style={[
 							styles.actionButton,
