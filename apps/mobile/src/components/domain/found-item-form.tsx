@@ -142,7 +142,7 @@ export function FoundItemForm({
 					onPress={pickFromCamera}
 					style={[
 						styles.photoButton,
-						{ backgroundColor: theme.backgroundElement },
+						{ backgroundColor: theme.surface, borderColor: theme.border },
 					]}
 				>
 					<ThemedText type="small">Câmera</ThemedText>
@@ -152,7 +152,7 @@ export function FoundItemForm({
 					onPress={pickFromGallery}
 					style={[
 						styles.photoButton,
-						{ backgroundColor: theme.backgroundElement },
+						{ backgroundColor: theme.surface, borderColor: theme.border },
 					]}
 				>
 					<ThemedText type="small">Galeria</ThemedText>
@@ -178,7 +178,7 @@ export function FoundItemForm({
 			)}
 
 			{imageError && (
-				<ThemedText type="small" style={{ color: "#E53935" }}>
+				<ThemedText type="small" style={{ color: theme.danger }}>
 					{imageError}
 				</ThemedText>
 			)}
@@ -194,8 +194,8 @@ export function FoundItemForm({
 					styles.input,
 					{
 						color: theme.text,
-						backgroundColor: theme.backgroundElement,
-						borderColor: theme.backgroundSelected,
+						backgroundColor: theme.surface,
+						borderColor: theme.border,
 					},
 				]}
 			/>
@@ -214,8 +214,8 @@ export function FoundItemForm({
 					styles.textArea,
 					{
 						color: theme.text,
-						backgroundColor: theme.backgroundElement,
-						borderColor: theme.backgroundSelected,
+						backgroundColor: theme.surface,
+						borderColor: theme.border,
 					},
 				]}
 			/>
@@ -238,7 +238,7 @@ export function FoundItemForm({
 			/>
 
 			{locationError && (
-				<ThemedText type="small" style={{ color: "#E53935" }}>
+				<ThemedText type="small" style={{ color: theme.danger }}>
 					{locationError}
 				</ThemedText>
 			)}
@@ -268,6 +268,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		paddingVertical: Spacing.three,
 		borderRadius: Spacing.two,
+		borderWidth: 1,
 		alignItems: "center",
 	},
 	clearButton: {

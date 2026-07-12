@@ -1,5 +1,5 @@
 import React from "react";
-import { ActivityIndicator, Pressable, StyleSheet, type PressableProps, View } from "react-native";
+import { ActivityIndicator, Pressable, StyleSheet, type PressableProps } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { Radius, Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
@@ -57,6 +57,6 @@ const styles = StyleSheet.create({
 		paddingVertical: Spacing.three,
 		paddingHorizontal: Spacing.four,
 		borderRadius: Radius.md,
-		minHeight: 48,
+		minHeight: 24,
 	},
 });

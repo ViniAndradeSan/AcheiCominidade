@@ -78,7 +78,7 @@ export function StatusFilterTabs({ value, onChange }: StatusFilterTabsProps) {
 const styles = StyleSheet.create({
 	container: {
 		flexDirection: "row",
-		marginVertical: Spacing.two,
+		marginVertical: Spacing.one,
 	},
 
 	pill: {

@@ -8,7 +8,7 @@ import { useTheme } from "@/hooks/use-theme";
 const CATEGORY_ICONS: Record<string, keyof typeof Feather.glyphMap> = {
 	eletronico: "smartphone",
 	documento: "file-text",
-	vestuario: "shirt",
+	vestuario: "shopping-bag",
 	outro: "more-horizontal",
 };
 
@@ -52,9 +52,11 @@ const styles = StyleSheet.create({
 	chip: {
 		flexDirection: "row",
 		alignItems: "center",
+		alignSelf: "flex-start",
 		gap: Spacing.one,
-		paddingHorizontal: Spacing.three,
-		paddingVertical: Spacing.two,
+		paddingHorizontal: Spacing.two,
+		paddingVertical: Spacing.one,
+		minHeight: 36,
 		borderRadius: Radius.md,
 	},
 });

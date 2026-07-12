@@ -4,7 +4,6 @@ import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import {
 	Pressable,
-	SafeAreaView,
 	ScrollView,
 	StyleSheet,
 	View,
@@ -14,10 +13,11 @@ import { ConfirmDialog } from "@/components/domain/confirm-dialog";
 import { ErrorState } from "@/components/domain/error-state";
 import { ItemPhoto } from "@/components/domain/item-photo";
 import { LoadingState } from "@/components/domain/loading-state";
+import { Screen } from "@/components/screen";
 import { StatusBadge } from "@/components/domain/status-badge";
 import { Button } from "@/components/ui/button";
 import { ThemedText } from "@/components/themed-text";
-import { Radius, Spacing } from "@/constants/theme";
+import { Spacing } from "@/constants/theme";
 import { useDeleteFoundItem } from "@/hooks/use-delete-found-item";
 import { useFoundItem } from "@/hooks/use-found-item";
 import { useTheme } from "@/hooks/use-theme";
@@ -35,22 +35,22 @@ export default function ItemDetailScreen() {
 
 	if (isLoading) {
 		return (
-			<SafeAreaView style={styles.center}>
+			<Screen style={styles.center}>
 				<LoadingState />
-			</SafeAreaView>
+			</Screen>
 		);
 	}
 
 	if (isError || !item) {
 		return (
-			<SafeAreaView style={styles.center}>
+			<Screen style={styles.center}>
 				<ErrorState message="Item não encontrado." onRetry={() => refetch()} />
-			</SafeAreaView>
+			</Screen>
 		);
 	}
 
 	return (
-		<SafeAreaView style={styles.container}>
+		<Screen style={styles.container}>
 			<Stack.Screen
 				options={{
 					title: item.title,
@@ -58,7 +58,11 @@ export default function ItemDetailScreen() {
 						<Pressable
 							onPress={() => setConfirmVisible(true)}
 							hitSlop={8}
-							style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}
+							style={({ pressed }) => ({
+								  padding: Spacing.two,
+								  borderRadius: 8,
+								  backgroundColor: theme.lildanger,
+								  opacity: pressed ? 0.5 : 1 })}
 						>
 							<Feather name="trash-2" size={20} color={theme.danger} />
 						</Pressable>
@@ -157,7 +161,7 @@ export default function ItemDetailScreen() {
 					});
 				}}
 			/>
-		</SafeAreaView>
+		</Screen>
 	);
 }
 

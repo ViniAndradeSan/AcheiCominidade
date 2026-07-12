@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
 		opacity: 0.8,
 	},
 	category: {
-		marginTop: Spacing.one,
-		marginBottom: Spacing.one,
+		marginTop: Spacing.two,
+		marginBottom: Spacing.two,
 	},
 });

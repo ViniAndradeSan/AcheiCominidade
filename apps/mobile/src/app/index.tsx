@@ -94,6 +94,7 @@ export default function HomeScreen() {
 				<ScrollView
 					horizontal
 					showsHorizontalScrollIndicator={false}
+					style={styles.chipScroll}
 					contentContainerStyle={styles.chipRow}
 				>
 					<CategoryChip
@@ -186,9 +187,18 @@ const styles = StyleSheet.create({
 	},
 
 	chipRow: {
+		flexDirection: "row",
+		alignItems: "center",
 		gap: Spacing.two,
 		paddingHorizontal: Spacing.three,
-		paddingVertical: Spacing.two,
+		paddingVertical: 0,
+	},
+
+	chipScroll: {
+		flexGrow: 0,
+		flexShrink: 0,
+		alignSelf: "stretch",
+		minHeight: 44,
 	},
 
 	list: {

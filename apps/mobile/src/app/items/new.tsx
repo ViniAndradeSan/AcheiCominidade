@@ -1,18 +1,13 @@
 import { Stack } from "expo-router";
-import { SafeAreaView, StyleSheet } from "react-native";
+
 import { FoundItemForm } from "@/components/domain/found-item-form";
+import { Screen } from "@/components/screen";
 
 export default function NewItemScreen() {
 	return (
-		<SafeAreaView style={styles.container}>
+		<Screen>
 			<Stack.Screen options={{ title: "Registrar item" }} />
 			<FoundItemForm />
-		</SafeAreaView>
+		</Screen>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-	},
-});
