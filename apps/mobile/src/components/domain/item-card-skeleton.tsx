@@ -1,37 +1,55 @@
+import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
-import { Spacing, Radius } from "@/constants/theme";
+import Animated, {
+	useSharedValue,
+	withRepeat,
+	withTiming,
+	useAnimatedStyle,
+} from "react-native-reanimated";
+
+import { Radius, Shadows, Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
+
+const SHIMMER_DURATION = 1200;
+
+function ShimmerBar({
+	style,
+	theme,
+}: {
+	style?: object;
+	theme: ReturnType<typeof useTheme>;
+}) {
+	const opacity = useSharedValue(0.5);
+
+	useEffect(() => {
+		opacity.value = withRepeat(
+			withTiming(1, { duration: SHIMMER_DURATION }),
+			-1,
+			true,
+		);
+	}, [opacity]);
+
+	const animatedStyle = useAnimatedStyle(() => ({
+		opacity: opacity.value,
+	}));
+
+	return (
+		<Animated.View
+			style={[style, { backgroundColor: theme.backgroundElement }, animatedStyle]}
+		/>
+	);
+}
 
 export function ItemCardSkeleton() {
 	const theme = useTheme();
 
 	return (
-		<View style={styles.card}>
-			<View
-				style={[styles.photo, { backgroundColor: theme.backgroundElement }]}
-			/>
+		<View style={[styles.card, Shadows.sm, { backgroundColor: theme.backgroundElevated }]}>
+			<ShimmerBar style={styles.photo} theme={theme} />
 			<View style={styles.content}>
-				<View
-					style={[
-						styles.line,
-						styles.lineWide,
-						{ backgroundColor: theme.backgroundElement },
-					]}
-				/>
-				<View
-					style={[
-						styles.line,
-						styles.lineChip,
-						{ backgroundColor: theme.backgroundElement },
-					]}
-				/>
-				<View
-					style={[
-						styles.line,
-						styles.lineNarrow,
-						{ backgroundColor: theme.backgroundElement },
-					]}
-				/>
+				<ShimmerBar style={[styles.line, styles.lineWide]} theme={theme} />
+				<ShimmerBar style={[styles.line, styles.lineChip]} theme={theme} />
+				<ShimmerBar style={[styles.line, styles.lineNarrow]} theme={theme} />
 			</View>
 		</View>
 	);

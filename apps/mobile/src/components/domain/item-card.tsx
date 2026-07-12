@@ -1,7 +1,8 @@
 import { Pressable, StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
-import { Spacing } from "@/constants/theme";
+import { Radius, Shadows, Spacing } from "@/constants/theme";
+import { useTheme } from "@/hooks/use-theme";
 import type { FoundItem } from "@/lib/types";
 
 import { CategoryChip } from "./category-chip";
@@ -14,12 +15,24 @@ type ItemCardProps = {
 };
 
 export function ItemCard({ item, onPress }: ItemCardProps) {
+	const theme = useTheme();
+
 	return (
 		<Pressable
 			onPress={onPress}
-			style={({ pressed }) => [styles.card, pressed && styles.pressed]}
+			style={({ pressed }) => [
+				styles.card,
+				Shadows.sm,
+				{ backgroundColor: theme.backgroundElevated },
+				pressed && styles.pressed,
+			]}
 		>
-			<ItemPhoto photoUrl={item.photoUrl} accessibilityLabel={item.title} />
+			<View style={styles.photoWrapper}>
+				<ItemPhoto
+					photoUrl={item.photoUrl}
+					accessibilityLabel={item.title}
+				/>
+			</View>
 
 			<View style={styles.content}>
 				<View style={styles.header}>
@@ -32,6 +45,7 @@ export function ItemCard({ item, onPress }: ItemCardProps) {
 
 				<CategoryChip
 					label={item.category?.name ?? ""}
+					slug={item.category?.slug}
 					selected={false}
 					onPress={() => {}}
 				/>
@@ -49,6 +63,14 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		gap: Spacing.three,
 		padding: Spacing.three,
+		borderRadius: Radius.lg,
+	},
+
+	photoWrapper: {
+		width: 96,
+		height: 96,
+		borderRadius: Radius.sm,
+		overflow: "hidden",
 	},
 
 	content: {
