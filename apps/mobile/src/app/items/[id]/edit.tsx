@@ -3,16 +3,15 @@
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import {
-	ActivityIndicator,
-	Pressable,
 	SafeAreaView,
 	StyleSheet,
 	TextInput,
 	View,
 } from "react-native";
 
+import { Button } from "@/components/ui/button";
 import { ThemedText } from "@/components/themed-text";
-import { Spacing } from "@/constants/theme";
+import { Radius, Spacing } from "@/constants/theme";
 import { useReturnItem } from "@/hooks/use-return-item";
 import { useTheme } from "@/hooks/use-theme";
 
@@ -69,23 +68,13 @@ export default function ConfirmReturnScreen() {
 					</ThemedText>
 				) : null}
 
-				<Pressable
-					onPress={handleConfirm}
+				<Button
+					label="Confirmar"
+					variant="primary"
+					loading={isPending}
 					disabled={isPending}
-					style={[
-						styles.confirmButton,
-						{
-							backgroundColor: theme.backgroundSelected,
-							opacity: isPending ? 0.6 : 1,
-						},
-					]}
-				>
-					{isPending ? (
-						<ActivityIndicator />
-					) : (
-						<ThemedText type="smallBold">Confirmar</ThemedText>
-					)}
-				</Pressable>
+					onPress={handleConfirm}
+				/>
 			</View>
 		</SafeAreaView>
 	);
@@ -96,17 +85,12 @@ const styles = StyleSheet.create({
 	content: { padding: Spacing.three, gap: Spacing.three },
 	input: {
 		borderWidth: 1,
-		borderRadius: 8,
+		borderRadius: Radius.md,
 		padding: Spacing.two,
 		minHeight: 80,
 		textAlignVertical: "top",
 	},
 	errorText: {
 		color: "#D64545",
-	},
-	confirmButton: {
-		paddingVertical: Spacing.three,
-		borderRadius: Spacing.four,
-		alignItems: "center",
 	},
 });

@@ -1,7 +1,6 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
-	ActivityIndicator,
 	Image,
 	Pressable,
 	ScrollView,
@@ -9,6 +8,7 @@ import {
 	TextInput,
 	View,
 } from "react-native";
+import { Button } from "@/components/ui/button";
 import { CategoryPicker } from "@/components/domain/category-picker";
 import { LocationField } from "@/components/domain/location-field";
 import { ThemedText } from "@/components/themed-text";
@@ -243,23 +243,13 @@ export function FoundItemForm({
 				</ThemedText>
 			)}
 
-			<Pressable
-				onPress={handleSubmit}
+			<Button
+				label={mode === "edit" ? "Salvar alterações" : "Registrar"}
+				variant="primary"
+				loading={isPending}
 				disabled={!canSubmit}
-				style={[
-					styles.submitButton,
-					{ backgroundColor: theme.backgroundElement },
-					!canSubmit && { opacity: 0.5 },
-				]}
-			>
-				{isPending ? (
-					<ActivityIndicator color={theme.text} size="small" />
-				) : (
-					<ThemedText type="smallBold">
-						{mode === "edit" ? "Salvar alterações" : "Registrar"}
-					</ThemedText>
-				)}
-			</Pressable>
+				onPress={handleSubmit}
+			/>
 		</ScrollView>
 	);
 }
@@ -300,11 +290,5 @@ const styles = StyleSheet.create({
 	textArea: {
 		minHeight: 80,
 		textAlignVertical: "top",
-	},
-	submitButton: {
-		marginTop: Spacing.two,
-		paddingVertical: Spacing.three,
-		borderRadius: Spacing.two,
-		alignItems: "center",
 	},
 });
