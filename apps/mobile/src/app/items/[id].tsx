@@ -1,8 +1,9 @@
+import { Feather } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import {
 	Pressable,
-	SafeAreaView,
 	ScrollView,
 	StyleSheet,
 	View,
@@ -12,7 +13,9 @@ import { ConfirmDialog } from "@/components/domain/confirm-dialog";
 import { ErrorState } from "@/components/domain/error-state";
 import { ItemPhoto } from "@/components/domain/item-photo";
 import { LoadingState } from "@/components/domain/loading-state";
+import { Screen } from "@/components/screen";
 import { StatusBadge } from "@/components/domain/status-badge";
+import { Button } from "@/components/ui/button";
 import { ThemedText } from "@/components/themed-text";
 import { Spacing } from "@/constants/theme";
 import { useDeleteFoundItem } from "@/hooks/use-delete-found-item";
@@ -32,34 +35,62 @@ export default function ItemDetailScreen() {
 
 	if (isLoading) {
 		return (
-			<SafeAreaView style={styles.center}>
+			<Screen style={styles.center}>
 				<LoadingState />
-			</SafeAreaView>
+			</Screen>
 		);
 	}
 
 	if (isError || !item) {
 		return (
-			<SafeAreaView style={styles.center}>
+			<Screen style={styles.center}>
 				<ErrorState message="Item não encontrado." onRetry={() => refetch()} />
-			</SafeAreaView>
+			</Screen>
 		);
 	}
 
 	return (
-		<SafeAreaView style={styles.container}>
-			<Stack.Screen options={{ title: item.title }} />
+		<Screen style={styles.container}>
+			<Stack.Screen
+				options={{
+					title: item.title,
+					headerRight: () => (
+						<Pressable
+							onPress={() => setConfirmVisible(true)}
+							hitSlop={8}
+							style={({ pressed }) => ({
+								  padding: Spacing.two,
+								  borderRadius: 8,
+								  backgroundColor: theme.lildanger,
+								  opacity: pressed ? 0.5 : 1 })}
+						>
+							<Feather name="trash-2" size={20} color={theme.danger} />
+						</Pressable>
+					),
+				}}
+			/>
 
 			<ScrollView contentContainerStyle={styles.content}>
-				<ItemPhoto
-					photoUrl={item.photoUrl}
-					size="full"
-					accessibilityLabel={item.title}
-				/>
-
-				<View style={styles.header}>
-					<ThemedText type="title">{item.title}</ThemedText>
-					<StatusBadge status={item.status} />
+				<View style={styles.heroPhoto}>
+					<ItemPhoto
+						photoUrl={item.photoUrl}
+						size="full"
+						accessibilityLabel={item.title}
+					/>
+					<LinearGradient
+						colors={["transparent", "rgba(0,0,0,0.7)"]}
+						style={styles.heroGradient}
+					/>
+					<View style={styles.heroOverlay}>
+						<ThemedText
+							type="title"
+							style={{ color: "#FFFFFF" }}
+							numberOfLines={2}
+						>
+							{item.title}
+						</ThemedText>
+						<StatusBadge status={item.status} />
+					</View>
 				</View>
 
 				{item.description ? (
@@ -78,62 +109,34 @@ export default function ItemDetailScreen() {
 
 				{item.foundLatitude !== null && item.foundLongitude !== null ? (
 					<ThemedText type="small">
-						📍 {item.foundLatitude.toFixed(5)}, {item.foundLongitude.toFixed(5)}
+						<Feather name="map-pin" size={14} color={theme.text} />{" "}
+						{item.foundLatitude.toFixed(5)}, {item.foundLongitude.toFixed(5)}
 					</ThemedText>
 				) : null}
 
 				{item.status === "disponivel" && (
-					<>
-						<Pressable
+					<View style={styles.actions}>
+						<Button
+							label="Marcar como devolvido"
+							variant="primary"
 							onPress={() => router.push(`/items/${id}/edit`)}
-							style={[
-								styles.actionButton,
-								{
-									backgroundColor: theme.backgroundSelected,
-								},
-							]}
-						>
-							<ThemedText type="smallBold">Marcar como devolvido</ThemedText>
-						</Pressable>
-
-						<Pressable
+						/>
+						<Button
+							label="Editar item"
+							variant="ghost"
 							onPress={() => router.push(`/items/${id}/update`)}
-							style={[
-								styles.actionButton,
-								{
-									backgroundColor: theme.backgroundElement,
-								},
-							]}
-						>
-							<ThemedText type="smallBold">Editar item</ThemedText>
-						</Pressable>
-
-						<Pressable
-							onPress={() => setConfirmVisible(true)}
-							style={[styles.actionButton, styles.deleteButton]}
-						>
-							<ThemedText type="smallBold" style={{ color: "#fff" }}>
-								Deletar item
-							</ThemedText>
-						</Pressable>
-					</>
+						/>
+					</View>
 				)}
 
 				{item.status === "devolvido" && item.itemReturn && (
-					<Pressable
-						onPress={() => undoReturn.mutate(item.itemReturn!.id)}
+					<Button
+						label={undoReturn.isPending ? "Revertendo..." : "Voltar para A procurar"}
+						variant="ghost"
+						loading={undoReturn.isPending}
 						disabled={undoReturn.isPending}
-						style={[
-							styles.actionButton,
-							{ backgroundColor: theme.backgroundElement },
-						]}
-					>
-						<ThemedText type="smallBold">
-							{undoReturn.isPending
-								? "Revertendo..."
-								: "Voltar para disponível"}
-						</ThemedText>
-					</Pressable>
+						onPress={() => undoReturn.mutate(item.itemReturn!.id)}
+					/>
 				)}
 			</ScrollView>
 
@@ -158,7 +161,7 @@ export default function ItemDetailScreen() {
 					});
 				}}
 			/>
-		</SafeAreaView>
+		</Screen>
 	);
 }
 
@@ -178,10 +181,26 @@ const styles = StyleSheet.create({
 		gap: Spacing.two,
 	},
 
-	header: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "space-between",
+	heroPhoto: {
+		position: "relative",
+		marginHorizontal: -Spacing.three,
+		marginTop: -Spacing.three,
+	},
+
+	heroGradient: {
+		position: "absolute",
+		bottom: 0,
+		left: 0,
+		right: 0,
+		height: 120,
+	},
+
+	heroOverlay: {
+		position: "absolute",
+		bottom: Spacing.three,
+		left: Spacing.three,
+		right: Spacing.three,
+		gap: Spacing.one,
 	},
 
 	row: {
@@ -189,14 +208,8 @@ const styles = StyleSheet.create({
 		flexWrap: "wrap",
 	},
 
-	actionButton: {
+	actions: {
+		gap: Spacing.two,
 		marginTop: Spacing.two,
-		paddingVertical: Spacing.three,
-		borderRadius: Spacing.four,
-		alignItems: "center",
-	},
-
-	deleteButton: {
-		backgroundColor: "#DC2626",
 	},
 });

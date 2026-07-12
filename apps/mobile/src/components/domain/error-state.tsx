@@ -1,7 +1,8 @@
+import { Feather } from "@expo/vector-icons";
 import { Pressable, StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
-import { Spacing } from "@/constants/theme";
+import { Radius, Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 
 type ErrorStateProps = {
@@ -17,7 +18,9 @@ export function ErrorState({
 
 	return (
 		<View style={styles.container}>
-			<ThemedText type="default" style={styles.message}>
+			<Feather name="alert-triangle" size={48} color={theme.danger} />
+
+			<ThemedText type="subtitle" style={styles.message}>
 				{message}
 			</ThemedText>
 
@@ -26,7 +29,7 @@ export function ErrorState({
 					onPress={onRetry}
 					style={[
 						styles.retryButton,
-						{ backgroundColor: theme.backgroundElement },
+						{ backgroundColor: theme.surface, borderColor: theme.border },
 					]}
 				>
 					<ThemedText type="smallBold">Tentar novamente</ThemedText>
@@ -42,14 +45,18 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		padding: Spacing.four,
+		gap: Spacing.two,
 	},
+
 	message: {
 		textAlign: "center",
-		marginBottom: Spacing.three,
 	},
+
 	retryButton: {
+		marginTop: Spacing.one,
 		paddingHorizontal: Spacing.four,
 		paddingVertical: Spacing.two,
-		borderRadius: Spacing.two,
+		borderRadius: Radius.md,
+		borderWidth: 1,
 	},
 });

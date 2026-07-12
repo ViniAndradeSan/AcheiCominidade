@@ -1,7 +1,6 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
-	ActivityIndicator,
 	Image,
 	Pressable,
 	ScrollView,
@@ -9,6 +8,7 @@ import {
 	TextInput,
 	View,
 } from "react-native";
+import { Button } from "@/components/ui/button";
 import { CategoryPicker } from "@/components/domain/category-picker";
 import { LocationField } from "@/components/domain/location-field";
 import { ThemedText } from "@/components/themed-text";
@@ -142,7 +142,7 @@ export function FoundItemForm({
 					onPress={pickFromCamera}
 					style={[
 						styles.photoButton,
-						{ backgroundColor: theme.backgroundElement },
+						{ backgroundColor: theme.surface, borderColor: theme.border },
 					]}
 				>
 					<ThemedText type="small">Câmera</ThemedText>
@@ -152,7 +152,7 @@ export function FoundItemForm({
 					onPress={pickFromGallery}
 					style={[
 						styles.photoButton,
-						{ backgroundColor: theme.backgroundElement },
+						{ backgroundColor: theme.surface, borderColor: theme.border },
 					]}
 				>
 					<ThemedText type="small">Galeria</ThemedText>
@@ -178,7 +178,7 @@ export function FoundItemForm({
 			)}
 
 			{imageError && (
-				<ThemedText type="small" style={{ color: "#E53935" }}>
+				<ThemedText type="small" style={{ color: theme.danger }}>
 					{imageError}
 				</ThemedText>
 			)}
@@ -194,8 +194,8 @@ export function FoundItemForm({
 					styles.input,
 					{
 						color: theme.text,
-						backgroundColor: theme.backgroundElement,
-						borderColor: theme.backgroundSelected,
+						backgroundColor: theme.surface,
+						borderColor: theme.border,
 					},
 				]}
 			/>
@@ -214,8 +214,8 @@ export function FoundItemForm({
 					styles.textArea,
 					{
 						color: theme.text,
-						backgroundColor: theme.backgroundElement,
-						borderColor: theme.backgroundSelected,
+						backgroundColor: theme.surface,
+						borderColor: theme.border,
 					},
 				]}
 			/>
@@ -238,28 +238,18 @@ export function FoundItemForm({
 			/>
 
 			{locationError && (
-				<ThemedText type="small" style={{ color: "#E53935" }}>
+				<ThemedText type="small" style={{ color: theme.danger }}>
 					{locationError}
 				</ThemedText>
 			)}
 
-			<Pressable
-				onPress={handleSubmit}
+			<Button
+				label={mode === "edit" ? "Salvar alterações" : "Registrar"}
+				variant="primary"
+				loading={isPending}
 				disabled={!canSubmit}
-				style={[
-					styles.submitButton,
-					{ backgroundColor: theme.backgroundElement },
-					!canSubmit && { opacity: 0.5 },
-				]}
-			>
-				{isPending ? (
-					<ActivityIndicator color={theme.text} size="small" />
-				) : (
-					<ThemedText type="smallBold">
-						{mode === "edit" ? "Salvar alterações" : "Registrar"}
-					</ThemedText>
-				)}
-			</Pressable>
+				onPress={handleSubmit}
+			/>
 		</ScrollView>
 	);
 }
@@ -278,6 +268,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		paddingVertical: Spacing.three,
 		borderRadius: Spacing.two,
+		borderWidth: 1,
 		alignItems: "center",
 	},
 	clearButton: {
@@ -300,11 +291,5 @@ const styles = StyleSheet.create({
 	textArea: {
 		minHeight: 80,
 		textAlignVertical: "top",
-	},
-	submitButton: {
-		marginTop: Spacing.two,
-		paddingVertical: Spacing.three,
-		borderRadius: Spacing.two,
-		alignItems: "center",
 	},
 });

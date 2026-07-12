@@ -1,4 +1,14 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useEffect } from "react";
+import { Pressable, StyleSheet, View } from "react-native";
+import Animated, {
+	useSharedValue,
+	withTiming,
+	useAnimatedStyle,
+} from "react-native-reanimated";
+
+import { ThemedText } from "@/components/themed-text";
+import { Radius, Spacing } from "@/constants/theme";
+import { useTheme } from "@/hooks/use-theme";
 
 type Status = "disponivel" | "devolvido";
 
@@ -7,27 +17,59 @@ type StatusFilterTabsProps = {
 	onChange: (status: Status) => void;
 };
 
+const TAB_COUNT = 2;
+
 export function StatusFilterTabs({ value, onChange }: StatusFilterTabsProps) {
+	const theme = useTheme();
+	const translateX = useSharedValue(value === "disponivel" ? 0 : 1);
+
+	useEffect(() => {
+		translateX.value = withTiming(value === "disponivel" ? 0 : 1, {
+			duration: 200,
+		});
+	}, [value, translateX]);
+
+	const pillStyle = useAnimatedStyle(() => ({
+		transform: [{ translateX: `${translateX.value * 100}%` }],
+	}));
+
 	return (
-		<View style={styles.container}>
+		<View
+			style={[
+				styles.container,
+				{ backgroundColor: theme.backgroundElement, borderRadius: Radius.md },
+			]}
+		>
+			<Animated.View
+				style={[
+					styles.pill,
+					pillStyle,
+					{ backgroundColor: theme.primary, borderRadius: Radius.md },
+				]}
+			/>
+
 			<Pressable
-				style={[styles.tab, value === "disponivel" && styles.activeTab]}
 				onPress={() => onChange("disponivel")}
+				style={styles.tab}
 			>
-				<Text
-					style={[styles.text, value === "disponivel" && styles.activeText]}
+				<ThemedText
+					type={value === "disponivel" ? "smallBold" : "small"}
+					style={{ color: value === "disponivel" ? theme.primaryText : theme.text }}
 				>
-					Disponíveis
-				</Text>
+					A procurar
+				</ThemedText>
 			</Pressable>
 
 			<Pressable
-				style={[styles.tab, value === "devolvido" && styles.activeTab]}
 				onPress={() => onChange("devolvido")}
+				style={styles.tab}
 			>
-				<Text style={[styles.text, value === "devolvido" && styles.activeText]}>
+				<ThemedText
+					type={value === "devolvido" ? "smallBold" : "small"}
+					style={{ color: value === "devolvido" ? theme.primaryText : theme.text }}
+				>
 					Devolvidos
-				</Text>
+				</ThemedText>
 			</Pressable>
 		</View>
 	);
@@ -36,28 +78,19 @@ export function StatusFilterTabs({ value, onChange }: StatusFilterTabsProps) {
 const styles = StyleSheet.create({
 	container: {
 		flexDirection: "row",
-		marginVertical: 12,
-		borderRadius: 8,
-		overflow: "hidden",
+		marginVertical: Spacing.one,
 	},
+
+	pill: {
+		...StyleSheet.absoluteFill,
+		width: `${100 / TAB_COUNT}%`,
+	},
+
 
 	tab: {
 		flex: 1,
-		paddingVertical: 10,
+		paddingVertical: Spacing.two,
 		alignItems: "center",
-		backgroundColor: "#E5E7EB",
-	},
-
-	activeTab: {
-		backgroundColor: "#2563EB",
-	},
-
-	text: {
-		fontWeight: "600",
-		color: "#374151",
-	},
-
-	activeText: {
-		color: "#FFFFFF",
+		justifyContent: "center",
 	},
 });

@@ -1,5 +1,8 @@
+import { Feather } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
+import { GlassView } from "expo-glass-effect";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "expo-router";
+import { useRouter, Stack } from "expo-router";
 import { useEffect, useState } from "react";
 import {
 	ActivityIndicator,
@@ -7,6 +10,7 @@ import {
 	Pressable,
 	ScrollView,
 	StyleSheet,
+	View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -18,7 +22,7 @@ import { ItemListSkeleton } from "@/components/domain/item-card-skeleton";
 import { StatusFilterTabs } from "@/components/domain/status-filter-tabs";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { Spacing } from "@/constants/theme";
+import { Radius, Shadows, Spacing } from "@/constants/theme";
 import { useCategories } from "@/hooks/use-categories";
 import { useFoundItems } from "@/hooks/use-found-items";
 import { useTheme } from "@/hooks/use-theme";
@@ -84,15 +88,14 @@ export default function HomeScreen() {
 	return (
 		<ThemedView style={styles.container}>
 			<SafeAreaView style={styles.safeArea}>
-				<ThemedText type="title" style={styles.title}>
-					Achei Comunidade
-				</ThemedText>
+				<Stack.Screen options={{ title: "Achei Comunidade" }} />
 
 				<StatusFilterTabs value={status} onChange={setStatus} />
 
 				<ScrollView
 					horizontal
 					showsHorizontalScrollIndicator={false}
+					style={styles.chipScroll}
 					contentContainerStyle={styles.chipRow}
 				>
 					<CategoryChip
@@ -105,6 +108,7 @@ export default function HomeScreen() {
 						<CategoryChip
 							key={c.id}
 							label={c.name}
+							slug={c.slug}
 							selected={categorySlug === c.slug}
 							onPress={() => setCategorySlug(c.slug)}
 						/>
@@ -147,7 +151,7 @@ export default function HomeScreen() {
 									categorySlug
 										? "Nenhum item nessa categoria"
 										: `Nenhum item ${
-												status === "disponivel" ? "disponível" : "devolvido"
+												status === "disponivel" ? "A procurar" : "devolvido"
 											} encontrado`
 								}
 							/>
@@ -155,17 +159,18 @@ export default function HomeScreen() {
 					}
 				/>
 
-				<Pressable
-					onPress={() => router.push("/items/new")}
-					style={[
-						styles.fab,
-						{
-							backgroundColor: theme.backgroundSelected,
-						},
-					]}
-				>
-					<ThemedText type="smallBold">+</ThemedText>
-				</Pressable>
+				<View style={styles.fabContainer}>
+					<GlassView style={styles.fabGlass} />
+					<Pressable
+						onPress={() => {
+							Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+							router.push("/items/new");
+						}}
+						style={[styles.fabPressable, { backgroundColor: theme.primary }]}
+					>
+						<Feather name="plus" size={24} color={theme.primaryText} />
+					</Pressable>
+				</View>
 			</SafeAreaView>
 		</ThemedView>
 	);
@@ -186,9 +191,18 @@ const styles = StyleSheet.create({
 	},
 
 	chipRow: {
+		flexDirection: "row",
+		alignItems: "center",
 		gap: Spacing.two,
 		paddingHorizontal: Spacing.three,
-		paddingVertical: Spacing.two,
+		paddingVertical: 0,
+	},
+
+	chipScroll: {
+		flexGrow: 0,
+		flexShrink: 0,
+		alignSelf: "stretch",
+		minHeight: 44,
 	},
 
 	list: {
@@ -199,14 +213,24 @@ const styles = StyleSheet.create({
 		paddingVertical: Spacing.two,
 	},
 
-	fab: {
+	fabContainer: {
 		position: "absolute",
 		bottom: Spacing.four,
 		right: Spacing.four,
 		width: 56,
 		height: 56,
 		borderRadius: 28,
+	},
+
+	fabGlass: {
+		...StyleSheet.absoluteFill,
+		borderRadius: 28,
+	},
+
+	fabPressable: {
+		flex: 1,
 		alignItems: "center",
 		justifyContent: "center",
+		borderRadius: 28,
 	},
 });

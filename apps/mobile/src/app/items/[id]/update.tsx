@@ -1,8 +1,9 @@
 import { Stack, useLocalSearchParams } from "expo-router";
-import { SafeAreaView, StyleSheet } from "react-native";
+
 import { ErrorState } from "@/components/domain/error-state";
 import { FoundItemForm } from "@/components/domain/found-item-form";
 import { LoadingState } from "@/components/domain/loading-state";
+import { Screen } from "@/components/screen";
 import { useFoundItem } from "@/hooks/use-found-item";
 
 export default function UpdateFoundItemScreen() {
@@ -19,7 +20,7 @@ export default function UpdateFoundItemScreen() {
 	}
 
 	return (
-		<>
+		<Screen>
 			<Stack.Screen
 				options={{
 					title: "Editar item",
@@ -27,14 +28,6 @@ export default function UpdateFoundItemScreen() {
 			/>
 
 			<FoundItemForm mode="edit" initialValues={item} />
-		</>
+		</Screen>
 	);
 }
-
-const styles = StyleSheet.create({
-	center: {
-		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
-	},
-});

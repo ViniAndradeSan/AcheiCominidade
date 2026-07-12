@@ -1,4 +1,9 @@
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import * as Haptics from "expo-haptics";
+import { Modal, StyleSheet, View } from "react-native";
+import { Button } from "@/components/ui/button";
+import { ThemedText } from "@/components/themed-text";
+import { Spacing } from "@/constants/theme";
+import { useTheme } from "@/hooks/use-theme";
 
 type ConfirmDialogProps = {
 	visible: boolean;
@@ -19,6 +24,13 @@ export function ConfirmDialog({
 	confirmText = "Confirmar",
 	cancelText = "Cancelar",
 }: ConfirmDialogProps) {
+	const theme = useTheme();
+
+	function handleConfirm() {
+		Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+		onConfirm();
+	}
+
 	return (
 		<Modal
 			visible={visible}
@@ -27,25 +39,27 @@ export function ConfirmDialog({
 			onRequestClose={onCancel}
 		>
 			<View style={styles.overlay}>
-				<View style={styles.dialog}>
-					<Text style={styles.title}>{title}</Text>
+				<View style={[styles.dialog, { backgroundColor: theme.background }]}>
+					<ThemedText type="subtitle" style={styles.title}>
+						{title}
+					</ThemedText>
 
-					<Text style={styles.message}>{message}</Text>
+					<ThemedText type="default" style={styles.message}>
+						{message}
+					</ThemedText>
 
 					<View style={styles.buttons}>
-						<Pressable
-							style={[styles.button, styles.cancelButton]}
+						<Button
+							label={cancelText}
+							variant="ghost"
 							onPress={onCancel}
-						>
-							<Text>{cancelText}</Text>
-						</Pressable>
+						/>
 
-						<Pressable
-							style={[styles.button, styles.confirmButton]}
-							onPress={onConfirm}
-						>
-							<Text style={styles.confirmText}>{confirmText}</Text>
-						</Pressable>
+						<Button
+							label={confirmText}
+							variant="danger"
+							onPress={handleConfirm}
+						/>
 					</View>
 				</View>
 			</View>
@@ -59,49 +73,26 @@ const styles = StyleSheet.create({
 		backgroundColor: "rgba(0,0,0,0.5)",
 		justifyContent: "center",
 		alignItems: "center",
-		padding: 24,
+		padding: Spacing.four,
 	},
 
 	dialog: {
 		width: "100%",
-		backgroundColor: "#fff",
 		borderRadius: 12,
-		padding: 20,
+		padding: Spacing.four,
 	},
 
 	title: {
-		fontSize: 18,
-		fontWeight: "700",
-		marginBottom: 12,
+		marginBottom: Spacing.two,
 	},
 
 	message: {
-		fontSize: 16,
-		marginBottom: 20,
+		marginBottom: Spacing.three,
 	},
 
 	buttons: {
 		flexDirection: "row",
 		justifyContent: "flex-end",
-		gap: 12,
-	},
-
-	button: {
-		paddingHorizontal: 16,
-		paddingVertical: 10,
-		borderRadius: 8,
-	},
-
-	cancelButton: {
-		backgroundColor: "#E5E7EB",
-	},
-
-	confirmButton: {
-		backgroundColor: "#DC2626",
-	},
-
-	confirmText: {
-		color: "#FFF",
-		fontWeight: "600",
+		gap: Spacing.two,
 	},
 });

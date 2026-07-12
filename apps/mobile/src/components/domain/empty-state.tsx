@@ -1,7 +1,9 @@
+import { Feather } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { Spacing } from "@/constants/theme";
+import { useTheme } from "@/hooks/use-theme";
 
 type EmptyStateProps = {
 	title: string;
@@ -9,9 +11,15 @@ type EmptyStateProps = {
 };
 
 export function EmptyState({ title, description }: EmptyStateProps) {
+	const theme = useTheme();
+
 	return (
 		<View style={styles.container}>
-			<ThemedText type="subtitle">{title}</ThemedText>
+			<Feather name="inbox" size={48} color={theme.textSecondary} />
+
+			<ThemedText type="subtitle" style={styles.title}>
+				{title}
+			</ThemedText>
 
 			{description ? (
 				<ThemedText type="default" style={styles.description}>
@@ -28,10 +36,14 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		padding: Spacing.four,
+		gap: Spacing.two,
+	},
+
+	title: {
+		textAlign: "center",
 	},
 
 	description: {
-		marginTop: Spacing.two,
 		textAlign: "center",
 	},
 });

@@ -13,20 +13,15 @@ export function StatusBadge({ status }: StatusBadgeProps) {
 	const theme = useTheme();
 
 	const isAvailable = status === "disponivel";
+	const statusColor = isAvailable
+		? theme.statusAvailable
+		: theme.statusReturned;
 
 	return (
-		<View
-			style={[
-				styles.badge,
-				{
-					backgroundColor: isAvailable
-						? theme.backgroundSelected
-						: theme.backgroundElement,
-				},
-			]}
-		>
+		<View style={styles.badge}>
+			<View style={[styles.dot, { backgroundColor: statusColor }]} />
 			<ThemedText type="smallBold">
-				{isAvailable ? "Disponível" : "Devolvido"}
+				{isAvailable ? "A procurar" : "Devolvido"}
 			</ThemedText>
 		</View>
 	);
@@ -35,8 +30,13 @@ export function StatusBadge({ status }: StatusBadgeProps) {
 const styles = StyleSheet.create({
 	badge: {
 		alignSelf: "flex-start",
-		paddingHorizontal: Spacing.three,
-		paddingVertical: Spacing.one,
-		borderRadius: Spacing.four,
+		flexDirection: "row",
+		alignItems: "center",
+		gap: Spacing.one,
+	},
+	dot: {
+		width: 8,
+		height: 8,
+		borderRadius: 4,
 	},
 });
