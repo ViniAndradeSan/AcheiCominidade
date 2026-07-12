@@ -21,7 +21,7 @@ export function StatusBadge({ status }: StatusBadgeProps) {
 		<View style={styles.badge}>
 			<View style={[styles.dot, { backgroundColor: statusColor }]} />
 			<ThemedText type="smallBold">
-				{isAvailable ? "Disponível" : "Devolvido"}
+				{isAvailable ? "A procurar" : "Devolvido"}
 			</ThemedText>
 		</View>
 	);

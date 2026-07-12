@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
-import { useQueryClient } from "@tanstack/react-query";
+import * as Haptics from "expo-haptics";
 import { GlassView } from "expo-glass-effect";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter, Stack } from "expo-router";
 import { useEffect, useState } from "react";
 import {
@@ -150,7 +151,7 @@ export default function HomeScreen() {
 									categorySlug
 										? "Nenhum item nessa categoria"
 										: `Nenhum item ${
-												status === "disponivel" ? "disponível" : "devolvido"
+												status === "disponivel" ? "A procurar" : "devolvido"
 											} encontrado`
 								}
 							/>
@@ -161,7 +162,10 @@ export default function HomeScreen() {
 				<View style={styles.fabContainer}>
 					<GlassView style={styles.fabGlass} />
 					<Pressable
-						onPress={() => router.push("/items/new")}
+						onPress={() => {
+							Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+							router.push("/items/new");
+						}}
 						style={[styles.fabPressable, { backgroundColor: theme.primary }]}
 					>
 						<Feather name="plus" size={24} color={theme.primaryText} />

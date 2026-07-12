@@ -56,7 +56,7 @@ export function StatusFilterTabs({ value, onChange }: StatusFilterTabsProps) {
 					type={value === "disponivel" ? "smallBold" : "small"}
 					style={{ color: value === "disponivel" ? theme.primaryText : theme.text }}
 				>
-					Disponíveis
+					A procurar
 				</ThemedText>
 			</Pressable>
 
@@ -82,9 +82,10 @@ const styles = StyleSheet.create({
 	},
 
 	pill: {
-		...StyleSheet.absoluteFillObject,
+		...StyleSheet.absoluteFill,
 		width: `${100 / TAB_COUNT}%`,
 	},
+
 
 	tab: {
 		flex: 1,

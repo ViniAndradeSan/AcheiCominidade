@@ -131,7 +131,7 @@ export default function ItemDetailScreen() {
 
 				{item.status === "devolvido" && item.itemReturn && (
 					<Button
-						label={undoReturn.isPending ? "Revertendo..." : "Voltar para disponível"}
+						label={undoReturn.isPending ? "Revertendo..." : "Voltar para A procurar"}
 						variant="ghost"
 						loading={undoReturn.isPending}
 						disabled={undoReturn.isPending}

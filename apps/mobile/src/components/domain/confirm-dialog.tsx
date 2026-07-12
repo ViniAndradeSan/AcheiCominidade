@@ -1,3 +1,4 @@
+import * as Haptics from "expo-haptics";
 import { Modal, StyleSheet, View } from "react-native";
 import { Button } from "@/components/ui/button";
 import { ThemedText } from "@/components/themed-text";
@@ -24,6 +25,11 @@ export function ConfirmDialog({
 	cancelText = "Cancelar",
 }: ConfirmDialogProps) {
 	const theme = useTheme();
+
+	function handleConfirm() {
+		Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+		onConfirm();
+	}
 
 	return (
 		<Modal
@@ -52,7 +58,7 @@ export function ConfirmDialog({
 						<Button
 							label={confirmText}
 							variant="danger"
-							onPress={onConfirm}
+							onPress={handleConfirm}
 						/>
 					</View>
 				</View>

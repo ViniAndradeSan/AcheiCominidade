@@ -1,5 +1,6 @@
 import React from "react";
 import { ActivityIndicator, Pressable, StyleSheet, type PressableProps } from "react-native";
+import * as Haptics from "expo-haptics";
 import { ThemedText } from "@/components/themed-text";
 import { Radius, Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
@@ -13,7 +14,7 @@ type ButtonProps = Omit<PressableProps, "style"> & {
 	icon?: React.ReactNode;
 };
 
-export function Button({ label, variant = "primary", loading, disabled, icon, ...rest }: ButtonProps) {
+export function Button({ label, variant = "primary", loading, disabled, icon, onPress, ...rest }: ButtonProps) {
 	const theme = useTheme();
 	const isDisabled = disabled || loading;
 
@@ -26,9 +27,16 @@ export function Button({ label, variant = "primary", loading, disabled, icon, ..
 
 	const textColor = variant === "primary" || variant === "danger" ? theme.primaryText : theme.text;
 
+	function handlePress(e: any) {
+		if (isDisabled) return;
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+		onPress?.(e);
+	}
+
 	return (
 		<Pressable
 			disabled={isDisabled}
+			onPress={handlePress}
 			style={({ pressed }) => [
 				styles.base,
 				{ backgroundColor, opacity: isDisabled ? 0.5 : pressed ? 0.85 : 1 },
