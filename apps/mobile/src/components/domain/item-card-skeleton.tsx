@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, {
+	useAnimatedStyle,
 	useSharedValue,
 	withRepeat,
 	withTiming,
-	useAnimatedStyle,
 } from "react-native-reanimated";
 
 import { Radius, Shadows, Spacing } from "@/constants/theme";
@@ -35,7 +35,11 @@ function ShimmerBar({
 
 	return (
 		<Animated.View
-			style={[style, { backgroundColor: theme.backgroundElement }, animatedStyle]}
+			style={[
+				style,
+				{ backgroundColor: theme.backgroundElement },
+				animatedStyle,
+			]}
 		/>
 	);
 }
@@ -44,7 +48,13 @@ export function ItemCardSkeleton() {
 	const theme = useTheme();
 
 	return (
-		<View style={[styles.card, Shadows.sm, { backgroundColor: theme.backgroundElevated }]}>
+		<View
+			style={[
+				styles.card,
+				Shadows.sm,
+				{ backgroundColor: theme.backgroundElevated },
+			]}
+		>
 			<ShimmerBar style={styles.photo} theme={theme} />
 			<View style={styles.content}>
 				<ShimmerBar style={[styles.line, styles.lineWide]} theme={theme} />

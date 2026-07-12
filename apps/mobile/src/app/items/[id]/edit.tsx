@@ -3,10 +3,9 @@
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
-
-import { Button } from "@/components/ui/button";
 import { Screen } from "@/components/screen";
 import { ThemedText } from "@/components/themed-text";
+import { Button } from "@/components/ui/button";
 import { Radius, Spacing } from "@/constants/theme";
 import { useReturnItem } from "@/hooks/use-return-item";
 import { useTheme } from "@/hooks/use-theme";
@@ -41,7 +40,8 @@ export default function ConfirmReturnScreen() {
 			<View style={styles.content}>
 				<ThemedText type="subtitle">Confirmar devolução</ThemedText>
 				<ThemedText type="small">
-					Essa ação marca o item como devolvido! Gostaria de adicionar uma observação?
+					Essa ação marca o item como devolvido! Gostaria de adicionar uma
+					observação?
 				</ThemedText>
 
 				<TextInput

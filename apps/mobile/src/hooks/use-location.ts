@@ -68,9 +68,9 @@ export function useLocation() {
 					const data = await res.json();
 					// Prefer `display_name` returned by Nominatim, fallback to building
 					// a short representation if necessary.
-					if (data && data.display_name) {
+					if (data?.display_name) {
 						addressText = String(data.display_name);
-					} else if (data && data.address) {
+					} else if (data?.address) {
 						const addr = data.address;
 						const parts = [
 							addr.road || addr.pedestrian,

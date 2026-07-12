@@ -1,8 +1,8 @@
 import { Feather } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
-import { GlassView } from "expo-glass-effect";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter, Stack } from "expo-router";
+import { GlassView } from "expo-glass-effect";
+import * as Haptics from "expo-haptics";
+import { Stack, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
 	ActivityIndicator,
@@ -20,9 +20,8 @@ import { ErrorState } from "@/components/domain/error-state";
 import { ItemCard } from "@/components/domain/item-card";
 import { ItemListSkeleton } from "@/components/domain/item-card-skeleton";
 import { StatusFilterTabs } from "@/components/domain/status-filter-tabs";
-import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { Radius, Shadows, Spacing } from "@/constants/theme";
+import { Spacing } from "@/constants/theme";
 import { useCategories } from "@/hooks/use-categories";
 import { useFoundItems } from "@/hooks/use-found-items";
 import { useTheme } from "@/hooks/use-theme";

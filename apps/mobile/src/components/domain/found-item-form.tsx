@@ -8,10 +8,10 @@ import {
 	TextInput,
 	View,
 } from "react-native";
-import { Button } from "@/components/ui/button";
 import { CategoryPicker } from "@/components/domain/category-picker";
 import { LocationField } from "@/components/domain/location-field";
 import { ThemedText } from "@/components/themed-text";
+import { Button } from "@/components/ui/button";
 import { Spacing } from "@/constants/theme";
 import { useCategories } from "@/hooks/use-categories";
 import { useCreateFoundItem } from "@/hooks/use-create-found-item";
@@ -91,11 +91,13 @@ export function FoundItemForm({
 					: image.uri
 				: initialValues?.photoUrl;
 
+		if (!photoUrl) return;
+
 		const payload = {
 			title: title.trim(),
 			description: description.trim() || undefined,
 			categoryId,
-			photoUrl: photoUrl!,
+			photoUrl,
 			foundLocationText: locationText.trim(),
 			foundLatitude: latitude ?? undefined,
 			foundLongitude: longitude ?? undefined,

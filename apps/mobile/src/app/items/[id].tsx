@@ -2,21 +2,16 @@ import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
-import {
-	Pressable,
-	ScrollView,
-	StyleSheet,
-	View,
-} from "react-native";
+import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 
 import { ConfirmDialog } from "@/components/domain/confirm-dialog";
 import { ErrorState } from "@/components/domain/error-state";
 import { ItemPhoto } from "@/components/domain/item-photo";
 import { LoadingState } from "@/components/domain/loading-state";
-import { Screen } from "@/components/screen";
 import { StatusBadge } from "@/components/domain/status-badge";
-import { Button } from "@/components/ui/button";
+import { Screen } from "@/components/screen";
 import { ThemedText } from "@/components/themed-text";
+import { Button } from "@/components/ui/button";
 import { Spacing } from "@/constants/theme";
 import { useDeleteFoundItem } from "@/hooks/use-delete-found-item";
 import { useFoundItem } from "@/hooks/use-found-item";
@@ -59,10 +54,11 @@ export default function ItemDetailScreen() {
 							onPress={() => setConfirmVisible(true)}
 							hitSlop={8}
 							style={({ pressed }) => ({
-								  padding: Spacing.two,
-								  borderRadius: 8,
-								  backgroundColor: theme.lildanger,
-								  opacity: pressed ? 0.5 : 1 })}
+								padding: Spacing.two,
+								borderRadius: 8,
+								backgroundColor: theme.lildanger,
+								opacity: pressed ? 0.5 : 1,
+							})}
 						>
 							<Feather name="trash-2" size={20} color={theme.danger} />
 						</Pressable>
@@ -131,11 +127,16 @@ export default function ItemDetailScreen() {
 
 				{item.status === "devolvido" && item.itemReturn && (
 					<Button
-						label={undoReturn.isPending ? "Revertendo..." : "Voltar para A procurar"}
+						label={
+							undoReturn.isPending ? "Revertendo..." : "Voltar para A procurar"
+						}
 						variant="ghost"
 						loading={undoReturn.isPending}
 						disabled={undoReturn.isPending}
-						onPress={() => undoReturn.mutate(item.itemReturn!.id)}
+						onPress={() => {
+							const itemReturnId = item.itemReturn?.id;
+							if (itemReturnId) undoReturn.mutate(itemReturnId);
+						}}
 					/>
 				)}
 			</ScrollView>

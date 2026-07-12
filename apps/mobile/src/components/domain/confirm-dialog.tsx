@@ -1,7 +1,7 @@
 import * as Haptics from "expo-haptics";
 import { Modal, StyleSheet, View } from "react-native";
-import { Button } from "@/components/ui/button";
 import { ThemedText } from "@/components/themed-text";
+import { Button } from "@/components/ui/button";
 import { Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 
@@ -49,11 +49,7 @@ export function ConfirmDialog({
 					</ThemedText>
 
 					<View style={styles.buttons}>
-						<Button
-							label={cancelText}
-							variant="ghost"
-							onPress={onCancel}
-						/>
+						<Button label={cancelText} variant="ghost" onPress={onCancel} />
 
 						<Button
 							label={confirmText}

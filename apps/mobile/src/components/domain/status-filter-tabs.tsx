@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import Animated, {
+	useAnimatedStyle,
 	useSharedValue,
 	withTiming,
-	useAnimatedStyle,
 } from "react-native-reanimated";
 
 import { ThemedText } from "@/components/themed-text";
@@ -48,25 +48,23 @@ export function StatusFilterTabs({ value, onChange }: StatusFilterTabsProps) {
 				]}
 			/>
 
-			<Pressable
-				onPress={() => onChange("disponivel")}
-				style={styles.tab}
-			>
+			<Pressable onPress={() => onChange("disponivel")} style={styles.tab}>
 				<ThemedText
 					type={value === "disponivel" ? "smallBold" : "small"}
-					style={{ color: value === "disponivel" ? theme.primaryText : theme.text }}
+					style={{
+						color: value === "disponivel" ? theme.primaryText : theme.text,
+					}}
 				>
 					A procurar
 				</ThemedText>
 			</Pressable>
 
-			<Pressable
-				onPress={() => onChange("devolvido")}
-				style={styles.tab}
-			>
+			<Pressable onPress={() => onChange("devolvido")} style={styles.tab}>
 				<ThemedText
 					type={value === "devolvido" ? "smallBold" : "small"}
-					style={{ color: value === "devolvido" ? theme.primaryText : theme.text }}
+					style={{
+						color: value === "devolvido" ? theme.primaryText : theme.text,
+					}}
 				>
 					Devolvidos
 				</ThemedText>
@@ -85,7 +83,6 @@ const styles = StyleSheet.create({
 		...StyleSheet.absoluteFill,
 		width: `${100 / TAB_COUNT}%`,
 	},
-
 
 	tab: {
 		flex: 1,

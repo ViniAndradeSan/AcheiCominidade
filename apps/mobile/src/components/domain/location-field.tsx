@@ -1,3 +1,4 @@
+import { Feather } from "@expo/vector-icons";
 import {
 	ActivityIndicator,
 	Pressable,
@@ -5,9 +6,8 @@ import {
 	TextInput,
 	View,
 } from "react-native";
-import { Feather } from "@expo/vector-icons";
 import { ThemedText } from "@/components/themed-text";
-import { Spacing, Radius } from "@/constants/theme";
+import { Radius, Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 
 export type LocationFieldProps = {

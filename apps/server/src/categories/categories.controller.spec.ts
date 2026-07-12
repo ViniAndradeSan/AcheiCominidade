@@ -6,7 +6,6 @@ import type { UpdateCategoryDto } from "./dto/update-category.dto";
 
 describe("CategoriesController", () => {
 	let controller: CategoriesController;
-	let service: CategoriesService;
 
 	const mockService = {
 		create: jest.fn(),
@@ -23,7 +22,6 @@ describe("CategoriesController", () => {
 		}).compile();
 
 		controller = module.get<CategoriesController>(CategoriesController);
-		service = module.get<CategoriesService>(CategoriesService);
 
 		jest.clearAllMocks();
 	});

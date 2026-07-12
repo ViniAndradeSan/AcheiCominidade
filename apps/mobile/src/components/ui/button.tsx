@@ -1,6 +1,12 @@
-import React from "react";
-import { ActivityIndicator, Pressable, StyleSheet, type PressableProps } from "react-native";
 import * as Haptics from "expo-haptics";
+import type React from "react";
+import {
+	ActivityIndicator,
+	type GestureResponderEvent,
+	Pressable,
+	type PressableProps,
+	StyleSheet,
+} from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { Radius, Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
@@ -14,7 +20,15 @@ type ButtonProps = Omit<PressableProps, "style"> & {
 	icon?: React.ReactNode;
 };
 
-export function Button({ label, variant = "primary", loading, disabled, icon, onPress, ...rest }: ButtonProps) {
+export function Button({
+	label,
+	variant = "primary",
+	loading,
+	disabled,
+	icon,
+	onPress,
+	...rest
+}: ButtonProps) {
 	const theme = useTheme();
 	const isDisabled = disabled || loading;
 
@@ -25,9 +39,12 @@ export function Button({ label, variant = "primary", loading, disabled, icon, on
 		ghost: "transparent",
 	}[variant];
 
-	const textColor = variant === "primary" || variant === "danger" ? theme.primaryText : theme.text;
+	const textColor =
+		variant === "primary" || variant === "danger"
+			? theme.primaryText
+			: theme.text;
 
-	function handlePress(e: any) {
+	function handlePress(e: GestureResponderEvent) {
 		if (isDisabled) return;
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 		onPress?.(e);
@@ -49,7 +66,9 @@ export function Button({ label, variant = "primary", loading, disabled, icon, on
 			) : (
 				<>
 					{icon}
-					<ThemedText type="smallBold" style={{ color: textColor }}>{label}</ThemedText>
+					<ThemedText type="smallBold" style={{ color: textColor }}>
+						{label}
+					</ThemedText>
 				</>
 			)}
 		</Pressable>

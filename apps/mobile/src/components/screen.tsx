@@ -1,8 +1,6 @@
-import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, type ViewProps } from "react-native";
-
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "@/hooks/use-theme";
-import { Spacing } from "@/constants/theme";
 
 export function Screen({ style, ...rest }: ViewProps) {
 	const theme = useTheme();

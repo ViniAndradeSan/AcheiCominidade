@@ -28,10 +28,7 @@ export function ItemCard({ item, onPress }: ItemCardProps) {
 			]}
 		>
 			<View style={styles.photoWrapper}>
-				<ItemPhoto
-					photoUrl={item.photoUrl}
-					accessibilityLabel={item.title}
-				/>
+				<ItemPhoto photoUrl={item.photoUrl} accessibilityLabel={item.title} />
 			</View>
 
 			<View style={styles.content}>
