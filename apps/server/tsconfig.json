@@ -5,7 +5,9 @@
 		"ignoreDeprecations": "6.0",
 		"baseUrl": ".",
 		"types": ["bun", "jest"],
-		"strictPropertyInitialization": false
+		"strictPropertyInitialization": false,
+		"verbatimModuleSyntax": false,
+		"isolatedModules": true
 	},
 	"include": ["src/**/*.ts", "env.d.ts", "scripts/**/*.ts", "prisma/**/*.ts"],
 	"exclude": ["node_modules", "dist"]

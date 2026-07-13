@@ -25,8 +25,8 @@ export default function ConfirmReturnScreen() {
 				onSuccess: () => {
 					router.replace(`/items/${id}`);
 				},
-				onError: (err) => {
-					if (err.message.includes("409")) {
+				onError: (err: unknown) => {
+					if (err instanceof Error && err.message.includes("409")) {
 						router.replace(`/items/${id}`);
 					}
 				},
@@ -62,7 +62,7 @@ export default function ConfirmReturnScreen() {
 
 				{error ? (
 					<ThemedText type="small" style={{ color: theme.danger }}>
-						{error.message.includes("409")
+						{error instanceof Error && error.message.includes("409")
 							? "Este item já foi devolvido anteriormente."
 							: "Não foi possível confirmar a devolução. Tente novamente."}
 					</ThemedText>

@@ -3,9 +3,9 @@ import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persi
 import { QueryClient } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { Stack } from "expo-router";
+import { OfflineBanner } from "@/components/domain/offline-banner";
 import { useReactQueryFocusManager } from "@/lib/query/focus-manager";
 import { setupReactQueryOnlineManager } from "@/lib/query/online-manager";
-import { OfflineBanner } from "@/components/domain/offline-banner";
 
 const queryClient = new QueryClient({
 	defaultOptions: {

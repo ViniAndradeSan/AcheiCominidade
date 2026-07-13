@@ -8,10 +8,7 @@ export function useReactQueryFocusManager() {
 			focusManager.setFocused(status === "active");
 		}
 
-		const subscription = AppState.addEventListener(
-			"change",
-			onAppStateChange,
-		);
+		const subscription = AppState.addEventListener("change", onAppStateChange);
 
 		return () => subscription.remove();
 	}, []);

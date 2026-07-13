@@ -1,10 +1,9 @@
 import { Feather } from "@expo/vector-icons";
 import { Pressable, StyleSheet, View } from "react-native";
-
-import { NetworkError } from "@/lib/api/client";
 import { ThemedText } from "@/components/themed-text";
 import { Radius, Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
+import { NetworkError } from "@/lib/api/client";
 
 type ErrorStateProps = {
 	message?: string;
