@@ -5,7 +5,7 @@
 		"dockerfilePath": "apps/server/Dockerfile"
 	},
 	"deploy": {
-		"preDeployCommand": "bun run db:deploy && bun run db:seed",
+		"preDeployCommand": "bun run db:deploy-and-seed",
 		"startCommand": "bun run start:prod",
 		"restartPolicyType": "ON_FAILURE"
 	}
