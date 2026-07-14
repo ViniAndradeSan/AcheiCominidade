@@ -3,7 +3,7 @@ import {
 	type OnModuleDestroy,
 	type OnModuleInit,
 } from "@nestjs/common";
-import { PrismaLibSql } from "@prisma/adapter-libsql";
+import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@/generated/prisma/client";
 
 @Injectable()
@@ -20,7 +20,7 @@ export class PrismaService
 		}
 
 		super({
-			adapter: new PrismaLibSql({ url }),
+			adapter: new PrismaPg({ connectionString: url }),
 		});
 	}
 

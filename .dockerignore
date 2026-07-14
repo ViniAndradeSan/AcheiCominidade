@@ -1,0 +1,13 @@
+**/node_modules
+**/dist
+**/.turbo
+**/.env
+**/.env.*.local
+**/.env.example
+.git
+.vscode
+*.md
+LICENSE
+apps/mobile
+!apps/mobile/package.json
+.expo
