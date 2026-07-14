@@ -43,7 +43,7 @@ export class FoundItemsService {
 	async findOne(id: string) {
 		const item = await this.prisma.foundItem.findUnique({
 			where: { id },
-			include: { category: true },
+			include: { category: true, itemReturn: true },
 		});
 
 		if (!item) {

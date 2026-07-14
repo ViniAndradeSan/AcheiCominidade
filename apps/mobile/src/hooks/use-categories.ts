@@ -1,0 +1,10 @@
+import { useQuery } from "@tanstack/react-query";
+import { getCategories } from "@/lib/api/categories";
+
+export function useCategories() {
+	return useQuery({
+		queryKey: ["categories"],
+		queryFn: getCategories,
+		staleTime: 60 * 60 * 1000, // 1h — lista de categorias muda raramente
+	});
+}

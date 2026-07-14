@@ -175,7 +175,7 @@ describe("FoundItemsService", () => {
 			expect(result).toEqual(mockFoundItemWithCategory);
 			expect(mockPrisma.foundItem.findUnique).toHaveBeenCalledWith({
 				where: { id: mockFoundItem.id },
-				include: { category: true },
+				include: { category: true, itemReturn: true },
 			});
 		});
 

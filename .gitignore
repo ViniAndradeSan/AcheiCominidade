@@ -1,3 +1,4 @@
 node_modules/
 /node_modules/.bun/node_modules
 .turbo/
+guia.md

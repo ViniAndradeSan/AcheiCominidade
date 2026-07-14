@@ -1,61 +1,176 @@
-import * as Device from "expo-device";
-import { Platform, StyleSheet } from "react-native";
+import { Feather } from "@expo/vector-icons";
+import { useQueryClient } from "@tanstack/react-query";
+import { GlassView } from "expo-glass-effect";
+import * as Haptics from "expo-haptics";
+import { Stack, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import {
+	ActivityIndicator,
+	FlatList,
+	Pressable,
+	ScrollView,
+	StyleSheet,
+	View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { AnimatedIcon } from "@/components/animated-icon";
-import { HintRow } from "@/components/hint-row";
-import { ThemedText } from "@/components/themed-text";
+import { CategoryChip } from "@/components/domain/category-chip";
+import { EmptyState } from "@/components/domain/empty-state";
+import { ErrorState, getErrorMessage } from "@/components/domain/error-state";
+import { ItemCard } from "@/components/domain/item-card";
+import { ItemListSkeleton } from "@/components/domain/item-card-skeleton";
+import { StatusFilterTabs } from "@/components/domain/status-filter-tabs";
 import { ThemedView } from "@/components/themed-view";
-import { WebBadge } from "@/components/web-badge";
-import { BottomTabInset, MaxContentWidth, Spacing } from "@/constants/theme";
-
-function getDevMenuHint() {
-	if (Platform.OS === "web") {
-		return <ThemedText type="small">use browser devtools</ThemedText>;
-	}
-	if (Device.isDevice) {
-		return (
-			<ThemedText type="small">
-				shake device or press <ThemedText type="code">m</ThemedText> in terminal
-			</ThemedText>
-		);
-	}
-	const shortcut = Platform.OS === "android" ? "cmd+m (or ctrl+m)" : "cmd+d";
-	return (
-		<ThemedText type="small">
-			press <ThemedText type="code">{shortcut}</ThemedText>
-		</ThemedText>
-	);
-}
+import { Spacing } from "@/constants/theme";
+import { useCategories } from "@/hooks/use-categories";
+import { useFoundItems } from "@/hooks/use-found-items";
+import { useTheme } from "@/hooks/use-theme";
+import { foundItemsKeys, getFoundItems } from "@/lib/api/found-items.queries";
+import type { FoundItem, ItemStatus } from "@/lib/types";
 
 export default function HomeScreen() {
+	const router = useRouter();
+	const theme = useTheme();
+
+	const [categorySlug, setCategorySlug] = useState<string | null>(null);
+	const [status, setStatus] = useState<ItemStatus>("disponivel");
+
+	const { data: categories } = useCategories();
+
+	const {
+		data: items,
+		isLoading,
+		isFetching,
+		isError,
+		error,
+		refetch,
+		isRefetching,
+	} = useFoundItems({
+		status,
+		category: categorySlug ?? undefined,
+	});
+
+	const queryClient = useQueryClient();
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: prefetch só depende das combinações de filtro/categoria
+	useEffect(() => {
+		if (!categories) return;
+
+		const otherStatus: ItemStatus =
+			status === "disponivel" ? "devolvido" : "disponivel";
+
+		queryClient.prefetchQuery({
+			queryKey: foundItemsKeys.list({
+				status: otherStatus,
+				category: categorySlug ?? undefined,
+			}),
+			queryFn: () =>
+				getFoundItems({
+					status: otherStatus,
+					category: categorySlug ?? undefined,
+				}),
+			staleTime: 15_000,
+		});
+
+		for (const c of categories) {
+			if (c.slug === categorySlug) continue;
+			queryClient.prefetchQuery({
+				queryKey: foundItemsKeys.list({ status, category: c.slug }),
+				queryFn: () => getFoundItems({ status, category: c.slug }),
+				staleTime: 15_000,
+			});
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [categories, status, categorySlug]);
+
+	const isInitialLoading = isLoading && items === undefined;
+
 	return (
 		<ThemedView style={styles.container}>
 			<SafeAreaView style={styles.safeArea}>
-				<ThemedView style={styles.heroSection}>
-					<AnimatedIcon />
-					<ThemedText type="title" style={styles.title}>
-						Welcome to&nbsp;Expo
-					</ThemedText>
-				</ThemedView>
+				<Stack.Screen options={{ title: "Achei Comunidade" }} />
 
-				<ThemedText type="code" style={styles.code}>
-					get started
-				</ThemedText>
+				<StatusFilterTabs value={status} onChange={setStatus} />
 
-				<ThemedView type="backgroundElement" style={styles.stepContainer}>
-					<HintRow
-						title="Try editing"
-						hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
+				<ScrollView
+					horizontal
+					showsHorizontalScrollIndicator={false}
+					style={styles.chipScroll}
+					contentContainerStyle={styles.chipRow}
+				>
+					<CategoryChip
+						label="Todas"
+						selected={categorySlug === null}
+						onPress={() => setCategorySlug(null)}
 					/>
-					<HintRow title="Dev tools" hint={getDevMenuHint()} />
-					<HintRow
-						title="Fresh start"
-						hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-					/>
-				</ThemedView>
 
-				{Platform.OS === "web" && <WebBadge />}
+					{categories?.map((c) => (
+						<CategoryChip
+							key={c.id}
+							label={c.name}
+							slug={c.slug}
+							selected={categorySlug === c.slug}
+							onPress={() => setCategorySlug(c.slug)}
+						/>
+					))}
+				</ScrollView>
+
+				{isFetching && !isInitialLoading && !isRefetching ? (
+					<ActivityIndicator
+						size="small"
+						color={theme.text}
+						style={styles.filterIndicator}
+					/>
+				) : null}
+
+				<FlatList
+					style={{ flex: 1 }}
+					data={items}
+					keyExtractor={(item: FoundItem) => item.id}
+					renderItem={({ item }) => (
+						<ItemCard
+							item={item}
+							onPress={() => router.push(`/items/${item.id}`)}
+						/>
+					)}
+					refreshing={isRefetching}
+					onRefresh={() => refetch()}
+					contentContainerStyle={styles.list}
+					ListEmptyComponent={
+						isInitialLoading ? (
+							<ItemListSkeleton />
+						) : isError ? (
+							<ErrorState
+								message={getErrorMessage(error, "Erro ao carregar itens.")}
+								onRetry={() => refetch()}
+							/>
+						) : (
+							<EmptyState
+								title="Nenhum item encontrado"
+								description={
+									categorySlug
+										? "Nenhum item nessa categoria"
+										: `Nenhum item ${
+												status === "disponivel" ? "A procurar" : "devolvido"
+											} encontrado`
+								}
+							/>
+						)
+					}
+				/>
+
+				<View style={styles.fabContainer}>
+					<GlassView style={styles.fabGlass} />
+					<Pressable
+						onPress={() => {
+							Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+							router.push("/items/new");
+						}}
+						style={[styles.fabPressable, { backgroundColor: theme.primary }]}
+					>
+						<Feather name="plus" size={24} color={theme.primaryText} />
+					</Pressable>
+				</View>
 			</SafeAreaView>
 		</ThemedView>
 	);
@@ -64,35 +179,58 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		justifyContent: "center",
-		flexDirection: "row",
 	},
+
 	safeArea: {
 		flex: 1,
-		paddingHorizontal: Spacing.four,
-		alignItems: "center",
-		gap: Spacing.three,
-		paddingBottom: BottomTabInset + Spacing.three,
-		maxWidth: MaxContentWidth,
 	},
-	heroSection: {
-		alignItems: "center",
-		justifyContent: "center",
-		flex: 1,
-		paddingHorizontal: Spacing.four,
-		gap: Spacing.four,
-	},
+
 	title: {
 		textAlign: "center",
+		paddingTop: Spacing.two,
 	},
-	code: {
-		textTransform: "uppercase",
-	},
-	stepContainer: {
-		gap: Spacing.three,
-		alignSelf: "stretch",
+
+	chipRow: {
+		flexDirection: "row",
+		alignItems: "center",
+		gap: Spacing.two,
 		paddingHorizontal: Spacing.three,
-		paddingVertical: Spacing.four,
-		borderRadius: Spacing.four,
+		paddingVertical: 0,
+	},
+
+	chipScroll: {
+		flexGrow: 0,
+		flexShrink: 0,
+		alignSelf: "stretch",
+		minHeight: 44,
+	},
+
+	list: {
+		flexGrow: 1,
+	},
+
+	filterIndicator: {
+		paddingVertical: Spacing.two,
+	},
+
+	fabContainer: {
+		position: "absolute",
+		bottom: Spacing.four,
+		right: Spacing.four,
+		width: 56,
+		height: 56,
+		borderRadius: 28,
+	},
+
+	fabGlass: {
+		...StyleSheet.absoluteFill,
+		borderRadius: 28,
+	},
+
+	fabPressable: {
+		flex: 1,
+		alignItems: "center",
+		justifyContent: "center",
+		borderRadius: 28,
 	},
 });

@@ -1,18 +1,37 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
+﻿import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
+import { QueryClient } from "@tanstack/react-query";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+import { Stack } from "expo-router";
+import { OfflineBanner } from "@/components/domain/offline-banner";
+import { useReactQueryFocusManager } from "@/lib/query/focus-manager";
+import { setupReactQueryOnlineManager } from "@/lib/query/online-manager";
 
-import { AnimatedSplashOverlay } from "@/components/animated-icon";
-import AppTabs from "@/components/app-tabs";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			staleTime: 30_000,
+			gcTime: 24 * 60 * 60 * 1000, // 24h — precisa ser >= maxAge do persister
+			retry: 2,
+		},
+		mutations: { retry: false },
+	},
+});
 
-SplashScreen.preventAutoHideAsync();
+const persister = createAsyncStoragePersister({ storage: AsyncStorage });
 
-export default function TabLayout() {
-	const colorScheme = useColorScheme();
+setupReactQueryOnlineManager();
+
+export default function RootLayout() {
+	useReactQueryFocusManager();
+
 	return (
-		<ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-			<AnimatedSplashOverlay />
-			<AppTabs />
-		</ThemeProvider>
+		<PersistQueryClientProvider
+			client={queryClient}
+			persistOptions={{ persister, maxAge: 24 * 60 * 60 * 1000 }}
+		>
+			<OfflineBanner />
+			<Stack />
+		</PersistQueryClientProvider>
 	);
 }

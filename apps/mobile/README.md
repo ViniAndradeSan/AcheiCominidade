@@ -32,6 +32,29 @@ You can start developing by editing the files inside the **src/app** directory. 
 - End-to-end tests use Detox (`bun run e2e:test:ios` / `e2e:test:android`); see `.detoxrc.js`.
 - Learn more about the TypeScript setup in this template in Expo's guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
 
+## Desenvolvimento
+
+A API backend roda em `apps/server`. Para testar o mobile contra a API real:
+
+1. Em um terminal, inicie o servidor:
+   ```bash
+   cd apps/server && bun run start:dev
+   ```
+   → Deixe rodando enquanto trabalha no mobile (hot reload com tsc-watch).
+
+2. Configure o `.env` do mobile com o IP correto:
+   - iOS Simulator → `http://localhost:3000` (padrão)
+   - Android Emulator → `http://10.2.2.2:3000`
+   - Expo Go (físico) → defina `EXPO_PUBLIC_API_URL=http://192.168.x.x:3000`
+
+3. Teste os endpoints:
+   ```bash
+   curl http://localhost:3000/categories          # lista de categorias
+   curl http://localhost:3000/found-items         # lista de itens (vazia)
+   ```
+
+> ⚠️ **Importante:** Sem o servidor rodando, os hooks `useFoundItems` e `useCategories` vão falhar com erro de rede. Mantenha o `start:dev` do server rodando em aba separada o tempo todo.
+
 ## Learn more
 
 To learn more about developing your project with Expo, look at the following resources:

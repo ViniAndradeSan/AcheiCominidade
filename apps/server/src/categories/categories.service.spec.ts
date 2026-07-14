@@ -1,4 +1,5 @@
 import { BadRequestException, NotFoundException } from "@nestjs/common";
+import type { PrismaService } from "@/prisma/prisma.service";
 import { Prisma } from "../generated/prisma/client";
 import { CategoriesService } from "./categories.service";
 import type { CreateCategoryDto } from "./dto/create-category.dto";
@@ -19,7 +20,7 @@ describe("CategoriesService", () => {
 	};
 
 	beforeEach(() => {
-		service = new CategoriesService(mockPrisma as any);
+		service = new CategoriesService(mockPrisma as unknown as PrismaService);
 		jest.clearAllMocks();
 	});
 
