@@ -3,7 +3,7 @@ import { useState } from "react";
 
 export type PickedImage = {
 	uri: string;
-	base64: string | null;
+	mimeType: string | null;
 };
 
 export function useImagePicker() {
@@ -23,13 +23,13 @@ export function useImagePicker() {
 		const result = await ImagePicker.launchCameraAsync({
 			mediaTypes: ["images"],
 			quality: 0.5,
-			base64: true,
+			base64: false,
 		});
 
 		if (result.canceled) return;
 
 		const asset = result.assets[0];
-		setImage({ uri: asset.uri, base64: asset.base64 ?? null });
+		setImage({ uri: asset.uri, mimeType: asset.mimeType ?? null });
 	}
 
 	async function pickFromGallery(): Promise<void> {
@@ -45,13 +45,13 @@ export function useImagePicker() {
 		const result = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ["images"],
 			quality: 0.5,
-			base64: true,
+			base64: false,
 		});
 
 		if (result.canceled) return;
 
 		const asset = result.assets[0];
-		setImage({ uri: asset.uri, base64: asset.base64 ?? null });
+		setImage({ uri: asset.uri, mimeType: asset.mimeType ?? null });
 	}
 
 	function clear(): void {

@@ -5,6 +5,7 @@ import { CategoriesModule } from "./categories/categories.module";
 import { FoundItemsModule } from "./found_items/found_items.module";
 import { ItemReturnsModule } from "./item_returns/item_returns.module";
 import { PrismaModule } from "./prisma/prisma.module";
+import { StorageModule } from "./storage/storage.module";
 
 @Module({
 	imports: [
@@ -12,6 +13,7 @@ import { PrismaModule } from "./prisma/prisma.module";
 		CategoriesModule,
 		FoundItemsModule,
 		ItemReturnsModule,
+		StorageModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],

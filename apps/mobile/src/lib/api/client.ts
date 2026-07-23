@@ -85,3 +85,18 @@ export async function apiFetch<T>(
 		clearTimeout(timeout);
 	}
 }
+
+export interface PresignedUploadResponse {
+	uploadUrl: string;
+	publicUrl: string;
+}
+
+export async function getPresignedUploadUrl(
+	filename: string,
+	contentType: string,
+): Promise<PresignedUploadResponse> {
+	return apiFetch<PresignedUploadResponse>("/uploads/presign", {
+		method: "POST",
+		body: JSON.stringify({ filename, contentType }),
+	});
+}

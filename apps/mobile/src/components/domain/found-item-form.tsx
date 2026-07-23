@@ -20,7 +20,6 @@ import { useLocation } from "@/hooks/use-location";
 import { useTheme } from "@/hooks/use-theme";
 import { useUpdateFoundItem } from "@/hooks/use-update-found-item";
 import type { FoundItem } from "@/lib/types";
-import { buildPhotoDataUri } from "@/lib/upload/upload-image";
 
 type FoundItemFormProps = {
 	mode?: "create" | "edit";
@@ -84,20 +83,10 @@ export function FoundItemForm({
 	function handleSubmit() {
 		if (!canSubmit || !categoryId) return;
 
-		const photoUrl =
-			image != null
-				? image.base64
-					? buildPhotoDataUri(image.base64)
-					: image.uri
-				: initialValues?.photoUrl;
-
-		if (!photoUrl) return;
-
 		const payload = {
 			title: title.trim(),
 			description: description.trim() || undefined,
 			categoryId,
-			photoUrl,
 			foundLocationText: locationText.trim(),
 			foundLatitude: latitude ?? undefined,
 			foundLongitude: longitude ?? undefined,
@@ -108,10 +97,15 @@ export function FoundItemForm({
 				{
 					id: initialValues.id,
 					input: payload,
+					imageUri: image?.uri,
+					imageMimeType: image?.mimeType ?? undefined,
 				},
 				{
 					onSuccess: () => {
-						if (typeof window !== "undefined" && window.history.length > 1) {
+						if (
+							typeof window !== "undefined" &&
+							window.history.length > 1
+						) {
 							router.back();
 						} else {
 							router.replace("/");
@@ -120,15 +114,25 @@ export function FoundItemForm({
 				},
 			);
 		} else {
-			createMutation.mutate(payload, {
-				onSuccess: () => {
-					if (typeof window !== "undefined" && window.history.length > 1) {
-						router.back();
-					} else {
-						router.replace("/");
-					}
+			createMutation.mutate(
+				{
+					input: payload,
+					imageUri: image?.uri,
+					imageMimeType: image?.mimeType ?? undefined,
 				},
-			});
+				{
+					onSuccess: () => {
+						if (
+							typeof window !== "undefined" &&
+							window.history.length > 1
+						) {
+							router.back();
+						} else {
+							router.replace("/");
+						}
+					},
+				},
+			);
 		}
 	}
 
@@ -246,7 +250,9 @@ export function FoundItemForm({
 			)}
 
 			<Button
-				label={mode === "edit" ? "Salvar alterações" : "Registrar"}
+				label={
+					mode === "edit" ? "Salvar alterações" : "Registrar"
+				}
 				variant="primary"
 				loading={isPending}
 				disabled={!canSubmit}
