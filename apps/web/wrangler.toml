@@ -1,0 +1,13 @@
+name = "achei-cominidade-web"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = "dist"
+
+[build]
+command = "bun run build"
+cwd = "apps/web"
+
+[env]
+VITE_API_URL = "https://achei-cominidade-api.up.railway.app"
+
+[env.production]
+VITE_API_URL = "https://achei-cominidade-api.up.railway.app"
