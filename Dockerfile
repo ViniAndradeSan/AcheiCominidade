@@ -1,16 +1,14 @@
-# Build context is the MONOREPO ROOT (not apps/server). apps/server depends
+# Build context is the MONOREPO ROOT. apps/server depends
 # on the workspace package "@tooling/biome" (workspace:^), which only
 # resolves when the workspace root (root package.json + tooling/biome) is
 # part of the build context — an apps/server-only context makes
-# `bun install --frozen-lockfile` fail. On Railway, leave the service's Root
-# Directory unset (repo root) and point it at this Dockerfile via
-# dockerfilePath: "apps/server/Dockerfile" (see /railway.json).
+# `bun install --frozen-lockfile` fail.
 FROM oven/bun:alpine AS base
 WORKDIR /usr/src/app
 # `prisma generate` (run via postinstall) loads prisma.config.ts, which calls
 # env("DATABASE_URL") and fails if the var is unset — even though generate
 # never opens a connection. This placeholder only matters at build time;
-# Railway injects the real DATABASE_URL at runtime, which overrides it.
+# the real DATABASE_URL is injected at runtime via environment variables.
 ENV DATABASE_URL="postgresql://user:password@localhost:5432/db"
 # bun install --frozen-lockfile validates against the FULL workspace, so
 # every workspace member's package.json manifest must be present (source is

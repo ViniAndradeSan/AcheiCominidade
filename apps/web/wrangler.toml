@@ -6,8 +6,10 @@ pages_build_output_dir = "dist"
 command = "bun run build"
 cwd = "apps/web"
 
+# Variáveis de ambiente para build
+# ATUALIZAR com a URL do backend após deploy no Belmo
 [env]
-VITE_API_URL = "https://achei-cominidade-api.up.railway.app"
+VITE_API_URL = "https://SEU-APP.belmo.io"
 
 [env.production]
-VITE_API_URL = "https://achei-cominidade-api.up.railway.app"
+VITE_API_URL = "https://SEU-APP.belmo.io"
