@@ -88,6 +88,34 @@ describe("FoundItemsController", () => {
 				category: "eletronico",
 			});
 		});
+
+		it("should pass search query through to the service", async () => {
+			mockService.findAll.mockResolvedValue([mockFoundItem]);
+
+			const result = await controller.findAll({ search: "carteira" });
+
+			expect(result).toEqual([mockFoundItem]);
+			expect(mockService.findAll).toHaveBeenCalledWith({
+				search: "carteira",
+			});
+		});
+
+		it("should combine search with status and category filters", async () => {
+			mockService.findAll.mockResolvedValue([mockFoundItem]);
+
+			const result = await controller.findAll({
+				status: "disponivel",
+				category: "eletronico",
+				search: "carteira",
+			});
+
+			expect(result).toEqual([mockFoundItem]);
+			expect(mockService.findAll).toHaveBeenCalledWith({
+				status: "disponivel",
+				category: "eletronico",
+				search: "carteira",
+			});
+		});
 	});
 
 	describe("findOne", () => {
