@@ -1,5 +1,5 @@
 import { IsEnum, IsOptional, IsString } from "class-validator";
-import { ItemStatus } from "@/generated/prisma/client";
+import { ItemStatus } from "../../generated/prisma/client";
 
 export class QueryFoundItemDto {
 	@IsOptional()

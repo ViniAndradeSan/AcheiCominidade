@@ -1,5 +1,5 @@
 import { Inject, Injectable, NotFoundException } from "@nestjs/common";
-import type { Prisma } from "@/generated/prisma/client";
+import type { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 import type { CreateFoundItemDto } from "./dto/create-found_item.dto";
 import type { QueryFoundItemDto } from "./dto/query-found_item.dto";
