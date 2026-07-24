@@ -12,7 +12,8 @@
 		"check": "turbo run check",
 		"test": "turbo run test",
 		"start": "turbo run start",
-		"start:dev": "turbo run start:dev"
+		"start:dev": "turbo run start:dev",
+		"start:prod": "cd apps/server && bun dist/main.js"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.4.2",
