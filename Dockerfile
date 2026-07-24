@@ -17,6 +17,7 @@ ENV DATABASE_URL="postgresql://user:password@localhost:5432/db"
 # tooling/typescript/server.json, read by `prisma generate` in the build stage.
 COPY package.json bun.lock ./
 COPY tooling ./tooling
+COPY apps/web/package.json ./apps/web/package.json
 COPY apps/mobile/package.json ./apps/mobile/package.json
 COPY apps/server/package.json ./apps/server/package.json
 COPY apps/server/prisma ./apps/server/prisma
