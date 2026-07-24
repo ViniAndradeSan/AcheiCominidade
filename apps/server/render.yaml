@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: achei-api
+    runtime: node
+    plan: free
+    buildCommand: |
+      cd apps/server
+      bun install
+      bunx prisma generate
+      bun run build
+    startCommand: cd apps/server && bun dist/main.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+    healthCheckPath: /api
+    autoDeploy: true
