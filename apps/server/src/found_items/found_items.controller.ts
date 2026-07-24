@@ -32,6 +32,11 @@ export class FoundItemsController {
 		return this.foundItemsService.findAll(query);
 	}
 
+	@Get("counts")
+	getCounts() {
+		return this.foundItemsService.counts();
+	}
+
 	@Get(":id")
 	findOne(@Param("id", ParseUUIDPipe) id: string) {
 		return this.foundItemsService.findOne(id);

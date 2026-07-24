@@ -38,4 +38,6 @@ export const foundItemsKeys = {
 		[...foundItemsKeys.all, "list", filters] as const,
 
 	detail: (id: string) => [...foundItemsKeys.all, "detail", id] as const,
+
+	counts: () => [...foundItemsKeys.all, "counts"] as const,
 };

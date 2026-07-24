@@ -1,4 +1,5 @@
 import { Pressable, StyleSheet, View } from "react-native";
+import Animated, { FadeInUp } from "react-native-reanimated";
 
 import { ThemedText } from "@/components/themed-text";
 import { Radius, Shadows, Spacing } from "@/constants/theme";
@@ -11,47 +12,50 @@ import { StatusBadge } from "./status-badge";
 
 type ItemCardProps = {
 	item: FoundItem;
+	index?: number;
 	onPress?: () => void;
 };
 
-export function ItemCard({ item, onPress }: ItemCardProps) {
+export function ItemCard({ item, index = 0, onPress }: ItemCardProps) {
 	const theme = useTheme();
 
 	return (
-		<Pressable
-			onPress={onPress}
-			style={({ pressed }) => [
-				styles.card,
-				Shadows.sm,
-				{ backgroundColor: theme.backgroundElevated },
-				pressed && styles.pressed,
-			]}
-		>
-			<View style={styles.photoWrapper}>
-				<ItemPhoto photoUrl={item.photoUrl} accessibilityLabel={item.title} />
-			</View>
-
-			<View style={styles.content}>
-				<View style={styles.header}>
-					<ThemedText type="smallBold" numberOfLines={2}>
-						{item.title}
-					</ThemedText>
-
-					<StatusBadge status={item.status} />
+		<Animated.View entering={FadeInUp.duration(300).delay(Math.min(index, 8) * 40)}>
+			<Pressable
+				onPress={onPress}
+				style={({ pressed }) => [
+					styles.card,
+					Shadows.sm,
+					{ backgroundColor: theme.backgroundElevated },
+					pressed && styles.pressed,
+				]}
+			>
+				<View style={styles.photoWrapper}>
+					<ItemPhoto photoUrl={item.photoUrl} accessibilityLabel={item.title} />
 				</View>
 
-				<CategoryChip
-					label={item.category?.name ?? ""}
-					slug={item.category?.slug}
-					selected={false}
-					onPress={() => {}}
-				/>
+				<View style={styles.content}>
+					<View style={styles.header}>
+						<ThemedText type="smallBold" numberOfLines={2}>
+							{item.title}
+						</ThemedText>
 
-				<ThemedText type="small" numberOfLines={1}>
-					{item.foundLocationText}
-				</ThemedText>
-			</View>
-		</Pressable>
+						<StatusBadge status={item.status} />
+					</View>
+
+					<CategoryChip
+						label={item.category?.name ?? ""}
+						slug={item.category?.slug}
+						selected={false}
+						onPress={() => {}}
+					/>
+
+					<ThemedText type="small" numberOfLines={1}>
+						{item.foundLocationText}
+					</ThemedText>
+				</View>
+			</Pressable>
+		</Animated.View>
 	);
 }
 

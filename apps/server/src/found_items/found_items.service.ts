@@ -15,6 +15,14 @@ export class FoundItemsService {
 		});
 	}
 
+	async counts() {
+		const [disponivel, devolvido] = await Promise.all([
+			this.prisma.foundItem.count({ where: { status: "disponivel" } }),
+			this.prisma.foundItem.count({ where: { status: "devolvido" } }),
+		]);
+		return { disponivel, devolvido };
+	}
+
 	async findAll(query: QueryFoundItemDto = {}) {
 		const where: Prisma.FoundItemWhereInput = {};
 		const page = Number(query.page) || 1;

@@ -5,6 +5,26 @@ import {
 	waitFor,
 } from "@testing-library/react-native";
 
+jest.mock("@expo/vector-icons", () => {
+	const React = require("react");
+	const { Text } = require("react-native");
+	return {
+		Feather: (props) => React.createElement(Text, null, props.name),
+	};
+});
+
+jest.mock("@/hooks/use-address-autocomplete", () => ({
+	useAddressAutocomplete: () => ({ data: [], isLoading: false }),
+}));
+
+jest.mock("@/components/themed-text", () => ({
+	ThemedText: (props) => {
+		const React = require("react");
+		const { Text } = require("react-native");
+		return React.createElement(Text, null, props.children);
+	},
+}));
+
 jest.mock("@/hooks/use-theme", () => ({
 	useTheme: () => ({
 		text: "#000000",
@@ -40,7 +60,7 @@ jest.mock("@/hooks/use-image-picker", () => ({
 }));
 
 jest.mock("expo-router", () => ({
-	useRouter: () => ({ back: jest.fn(), replace: jest.fn() }),
+	useRouter: () => ({ back: jest.fn(), replace: jest.fn(), canGoBack: () => true, goBack: jest.fn() }),
 }));
 
 const mockCaptureCurrentLocation = jest.fn();

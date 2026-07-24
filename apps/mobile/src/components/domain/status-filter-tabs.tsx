@@ -15,11 +15,12 @@ type Status = "disponivel" | "devolvido";
 type StatusFilterTabsProps = {
 	value: Status;
 	onChange: (status: Status) => void;
+	counts?: { disponivel: number; devolvido: number };
 };
 
 const TAB_COUNT = 2;
 
-export function StatusFilterTabs({ value, onChange }: StatusFilterTabsProps) {
+export function StatusFilterTabs({ value, onChange, counts }: StatusFilterTabsProps) {
 	const theme = useTheme();
 	const translateX = useSharedValue(value === "disponivel" ? 0 : 1);
 
@@ -57,6 +58,16 @@ export function StatusFilterTabs({ value, onChange }: StatusFilterTabsProps) {
 				>
 					A procurar
 				</ThemedText>
+				{counts && (
+					<View
+						style={[
+							styles.badge,
+							{ backgroundColor: theme.backgroundSelected },
+						]}
+					>
+						<ThemedText type="small">{counts.disponivel}</ThemedText>
+					</View>
+				)}
 			</Pressable>
 
 			<Pressable onPress={() => onChange("devolvido")} style={styles.tab}>
@@ -68,6 +79,16 @@ export function StatusFilterTabs({ value, onChange }: StatusFilterTabsProps) {
 				>
 					Devolvidos
 				</ThemedText>
+				{counts && (
+					<View
+						style={[
+							styles.badge,
+							{ backgroundColor: theme.backgroundSelected },
+						]}
+					>
+						<ThemedText type="small">{counts.devolvido}</ThemedText>
+					</View>
+				)}
 			</Pressable>
 		</View>
 	);
@@ -76,7 +97,7 @@ export function StatusFilterTabs({ value, onChange }: StatusFilterTabsProps) {
 const styles = StyleSheet.create({
 	container: {
 		flexDirection: "row",
-		marginVertical: Spacing.one,
+		marginVertical: Spacing.two,
 	},
 
 	pill: {
@@ -86,8 +107,16 @@ const styles = StyleSheet.create({
 
 	tab: {
 		flex: 1,
+		flexDirection: "row",
+		gap: Spacing.one,
 		paddingVertical: Spacing.two,
 		alignItems: "center",
 		justifyContent: "center",
+	},
+
+	badge: {
+		paddingHorizontal: Spacing.one,
+		paddingVertical: 1,
+		borderRadius: Radius.pill,
 	},
 });

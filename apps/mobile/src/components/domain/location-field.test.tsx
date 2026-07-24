@@ -1,5 +1,21 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 
+jest.mock("@expo/vector-icons", () => {
+	const React = require("react");
+	const { Text } = require("react-native");
+	return {
+		Feather: (props) => React.createElement(Text, null, props.name),
+	};
+});
+
+jest.mock("@/components/themed-text", () => ({
+	ThemedText: (props) => {
+		const React = require("react");
+		const { Text } = require("react-native");
+		return React.createElement(Text, null, props.children);
+	},
+}));
+
 const mockSuggestions = [
 	{ displayName: "Rua das Flores, 123, São Paulo", latitude: -23.55, longitude: -46.63 },
 	{ displayName: "Rua da Consolação, 456, São Paulo", latitude: -23.56, longitude: -46.64 },

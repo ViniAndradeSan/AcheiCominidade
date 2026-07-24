@@ -8,6 +8,7 @@ import {
 	ActivityIndicator,
 	FlatList,
 	Pressable,
+	RefreshControl,
 	ScrollView,
 	StyleSheet,
 	View,
@@ -17,6 +18,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { CategoryChip } from "@/components/domain/category-chip";
 import { EmptyState } from "@/components/domain/empty-state";
 import { ErrorState, getErrorMessage } from "@/components/domain/error-state";
+import { HomeHeader } from "@/components/domain/home-header";
 import { ItemCard } from "@/components/domain/item-card";
 import { ItemListSkeleton } from "@/components/domain/item-card-skeleton";
 import { SearchBar } from "@/components/domain/search-bar";
@@ -26,6 +28,7 @@ import { Spacing } from "@/constants/theme";
 import { useCategories } from "@/hooks/use-categories";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useFoundItems } from "@/hooks/use-found-items";
+import { useItemCounts } from "@/hooks/use-item-counts";
 import { useTheme } from "@/hooks/use-theme";
 import { foundItemsKeys, getFoundItems } from "@/lib/api/found-items.queries";
 import type { FoundItem, ItemStatus } from "@/lib/types";
@@ -40,6 +43,7 @@ export default function HomeScreen() {
 	const debouncedSearch = useDebouncedValue(searchText, 400);
 
 	const { data: categories } = useCategories();
+	const { data: counts } = useItemCounts();
 
 	const {
 		data: items,
@@ -93,9 +97,11 @@ export default function HomeScreen() {
 	return (
 		<ThemedView style={styles.container}>
 			<SafeAreaView style={styles.safeArea}>
-				<Stack.Screen options={{ title: "Achei Comunidade" }} />
+				<Stack.Screen options={{ headerShown: false }} />
 
-				<StatusFilterTabs value={status} onChange={setStatus} />
+				<HomeHeader />
+
+				<StatusFilterTabs value={status} onChange={setStatus} counts={counts} />
 
 				<ScrollView
 					horizontal
@@ -134,14 +140,22 @@ export default function HomeScreen() {
 					style={{ flex: 1 }}
 					data={items}
 					keyExtractor={(item: FoundItem) => item.id}
-					renderItem={({ item }) => (
+					renderItem={({ item, index }) => (
 						<ItemCard
 							item={item}
+							index={index}
 							onPress={() => router.push(`/items/${item.id}`)}
 						/>
 					)}
-					refreshing={isRefetching}
-					onRefresh={() => refetch()}
+					refreshControl={
+						<RefreshControl
+							refreshing={isRefetching}
+							onRefresh={() => refetch()}
+							tintColor={theme.primary}
+							colors={[theme.primary]}
+							progressBackgroundColor={theme.backgroundElevated}
+						/>
+					}
 					contentContainerStyle={styles.list}
 					ListEmptyComponent={
 						isInitialLoading ? (

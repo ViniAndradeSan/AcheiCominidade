@@ -1,5 +1,13 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 
+jest.mock("@expo/vector-icons", () => {
+	const React = require("react");
+	const { Text } = require("react-native");
+	return {
+		Feather: (props) => React.createElement(Text, null, props.name),
+	};
+});
+
 jest.mock("@/hooks/use-theme", () => ({
 	useTheme: () => ({
 		text: "#000000",

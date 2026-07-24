@@ -40,6 +40,7 @@ describe("FoundItemsService", () => {
 			create: jest.fn(),
 			findMany: jest.fn(),
 			findUnique: jest.fn(),
+			count: jest.fn(),
 			update: jest.fn(),
 			delete: jest.fn(),
 		},
@@ -88,14 +89,13 @@ describe("FoundItemsService", () => {
 			mockPrisma.foundItem.findMany.mockResolvedValue([
 				mockFoundItemWithCategory,
 			]);
+			mockPrisma.foundItem.count.mockResolvedValue(1);
 
 			const result = await service.findAll();
 
-			expect(result).toEqual([mockFoundItemWithCategory]);
-			expect(mockPrisma.foundItem.findMany).toHaveBeenCalledWith({
-				where: {},
-				include: { category: true },
-				orderBy: { foundAt: "desc" },
+			expect(result).toEqual({
+				data: [mockFoundItemWithCategory],
+				meta: { total: 1, page: 1, limit: 12 },
 			});
 		});
 
@@ -103,64 +103,72 @@ describe("FoundItemsService", () => {
 			mockPrisma.foundItem.findMany.mockResolvedValue([
 				mockFoundItemWithCategory,
 			]);
+			mockPrisma.foundItem.count.mockResolvedValue(1);
 
-			await service.findAll({ status: "disponivel" });
+			const result = await service.findAll({ status: "disponivel" });
 
-			expect(mockPrisma.foundItem.findMany).toHaveBeenCalledWith({
-				where: { status: "disponivel" },
-				include: { category: true },
-				orderBy: { foundAt: "desc" },
-			});
+			expect(result.meta.total).toBe(1);
+			expect(mockPrisma.foundItem.findMany).toHaveBeenCalledWith(
+				expect.objectContaining({
+					where: { status: "disponivel" },
+				}),
+			);
 		});
 
 		it("should filter by category slug", async () => {
 			mockPrisma.foundItem.findMany.mockResolvedValue([
 				mockFoundItemWithCategory,
 			]);
+			mockPrisma.foundItem.count.mockResolvedValue(1);
 
-			await service.findAll({ category: "eletronico" });
+			const result = await service.findAll({ category: "eletronico" });
 
-			expect(mockPrisma.foundItem.findMany).toHaveBeenCalledWith({
-				where: { category: { slug: "eletronico" } },
-				include: { category: true },
-				orderBy: { foundAt: "desc" },
-			});
+			expect(result.meta.total).toBe(1);
+			expect(mockPrisma.foundItem.findMany).toHaveBeenCalledWith(
+				expect.objectContaining({
+					where: { category: { slug: "eletronico" } },
+				}),
+			);
 		});
 
 		it("should search by title or description", async () => {
 			mockPrisma.foundItem.findMany.mockResolvedValue([
 				mockFoundItemWithCategory,
 			]);
+			mockPrisma.foundItem.count.mockResolvedValue(1);
 
-			await service.findAll({ search: "carteira" });
+			const result = await service.findAll({ search: "carteira" });
 
-			expect(mockPrisma.foundItem.findMany).toHaveBeenCalledWith({
-				where: {
-					OR: [
-						{ title: { contains: "carteira" } },
-						{ description: { contains: "carteira" } },
-					],
-				},
-				include: { category: true },
-				orderBy: { foundAt: "desc" },
-			});
+			expect(result.meta.total).toBe(1);
+			expect(mockPrisma.foundItem.findMany).toHaveBeenCalledWith(
+				expect.objectContaining({
+					where: {
+						OR: [
+							{ title: { contains: "carteira" } },
+							{ description: { contains: "carteira" } },
+						],
+					},
+				}),
+			);
 		});
 
 		it("should combine status and category filters", async () => {
 			mockPrisma.foundItem.findMany.mockResolvedValue([
 				mockFoundItemWithCategory,
 			]);
+			mockPrisma.foundItem.count.mockResolvedValue(1);
 
-			await service.findAll({ status: "disponivel", category: "eletronico" });
+			const result = await service.findAll({ status: "disponivel", category: "eletronico" });
 
-			expect(mockPrisma.foundItem.findMany).toHaveBeenCalledWith({
-				where: {
-					status: "disponivel",
-					category: { slug: "eletronico" },
-				},
-				include: { category: true },
-				orderBy: { foundAt: "desc" },
-			});
+			expect(result.meta.total).toBe(1);
+			expect(mockPrisma.foundItem.findMany).toHaveBeenCalledWith(
+				expect.objectContaining({
+					where: {
+						status: "disponivel",
+						category: { slug: "eletronico" },
+					},
+				}),
+			);
 		});
 	});
 
