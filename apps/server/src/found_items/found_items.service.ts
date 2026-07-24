@@ -17,6 +17,9 @@ export class FoundItemsService {
 
 	async findAll(query: QueryFoundItemDto = {}) {
 		const where: Prisma.FoundItemWhereInput = {};
+		const page = query.page ?? 1;
+		const limit = query.limit ?? 12;
+		const skip = (page - 1) * limit;
 
 		if (query.status) {
 			where.status = query.status;
@@ -33,11 +36,21 @@ export class FoundItemsService {
 			];
 		}
 
-		return this.prisma.foundItem.findMany({
-			where,
-			include: { category: true },
-			orderBy: { foundAt: "desc" },
-		});
+		const [data, total] = await Promise.all([
+			this.prisma.foundItem.findMany({
+				where,
+				include: { category: true },
+				orderBy: { foundAt: "desc" },
+				skip,
+				take: limit,
+			}),
+			this.prisma.foundItem.count({ where }),
+		]);
+
+		return {
+			data,
+			meta: { total, page, limit },
+		};
 	}
 
 	async findOne(id: string) {
