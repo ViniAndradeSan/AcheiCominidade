@@ -63,4 +63,4 @@ WORKDIR /usr/src/app/apps/server
 ENV PORT=3000
 ENV NODE_ENV=production
 EXPOSE ${PORT}
-CMD ["sh", "apps/server/start.sh"]
+CMD ["sh", "start.sh"]
