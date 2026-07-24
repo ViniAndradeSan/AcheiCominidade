@@ -7,9 +7,8 @@ command = "bun run build"
 cwd = "apps/web"
 
 # Variáveis de ambiente para build
-# ATUALIZAR com a URL do backend após deploy no Belmo
 [env]
-VITE_API_URL = "https://SEU-APP.belmo.io"
+VITE_API_URL = "https://acheicominidade.onrender.com"
 
 [env.production]
-VITE_API_URL = "https://SEU-APP.belmo.io"
+VITE_API_URL = "https://acheicominidade.onrender.com"
