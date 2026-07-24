@@ -18,6 +18,11 @@ const result = await build({
 		syntax: true,
 		whitespace: true,
 	},
+	// Resolve the `@/` path alias from tsconfig.json so the bundle
+	// contains real relative paths instead of unresolved `@/generated/...`.
+	alias: {
+		"@": "./src",
+	},
 	// Keep all npm packages external instead of inlining them. Some deps
 	// (e.g. `libsql`, used by @prisma/adapter-libsql) resolve their native
 	// binary via a runtime `require(`@libsql/${platform}`)` call that only
