@@ -17,12 +17,12 @@ export class FoundItemsService {
 
 	async findAll(query: QueryFoundItemDto = {}) {
 		const where: Prisma.FoundItemWhereInput = {};
-		const page = query.page ?? 1;
-		const limit = query.limit ?? 12;
+		const page = Number(query.page) || 1;
+		const limit = Number(query.limit) || 12;
 		const skip = (page - 1) * limit;
 
 		if (query.status) {
-			where.status = query.status;
+			where.status = query.status as any;
 		}
 
 		if (query.category) {
