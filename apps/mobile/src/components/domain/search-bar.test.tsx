@@ -1,13 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 
-jest.mock("@expo/vector-icons", () => {
-	const React = require("react");
-	const { Text } = require("react-native");
-	return {
-		Feather: (props) => React.createElement(Text, null, props.name),
-	};
-});
-
 jest.mock("@/hooks/use-theme", () => ({
 	useTheme: () => ({
 		text: "#000000",
@@ -26,13 +18,13 @@ describe("SearchBar", () => {
 		jest.clearAllMocks();
 	});
 
-	it("renders with default placeholder", () => {
-		render(<SearchBar value="" onChangeText={mockOnChangeText} />);
+	it("renders with default placeholder", async () => {
+		await render(<SearchBar value="" onChangeText={mockOnChangeText} />);
 		expect(screen.getByPlaceholderText("Buscar itens...")).toBeTruthy();
 	});
 
-	it("renders with custom placeholder", () => {
-		render(
+	it("renders with custom placeholder", async () => {
+		await render(
 			<SearchBar
 				value=""
 				onChangeText={mockOnChangeText}
@@ -42,25 +34,25 @@ describe("SearchBar", () => {
 		expect(screen.getByPlaceholderText("Buscar por titulo...")).toBeTruthy();
 	});
 
-	it("calls onChangeText when typing", () => {
-		render(<SearchBar value="" onChangeText={mockOnChangeText} />);
-		fireEvent.changeText(screen.getByPlaceholderText("Buscar itens..."), "fone");
+	it("calls onChangeText when typing", async () => {
+		await render(<SearchBar value="" onChangeText={mockOnChangeText} />);
+		await fireEvent.changeText(screen.getByPlaceholderText("Buscar itens..."), "fone");
 		expect(mockOnChangeText).toHaveBeenCalledWith("fone");
 	});
 
-	it("shows clear button when value is not empty", () => {
-		render(<SearchBar value="fone" onChangeText={mockOnChangeText} />);
+	it("shows clear button when value is not empty", async () => {
+		await render(<SearchBar value="fone" onChangeText={mockOnChangeText} />);
 		expect(screen.getByLabelText("clear-search")).toBeTruthy();
 	});
 
-	it("hides clear button when value is empty", () => {
-		render(<SearchBar value="" onChangeText={mockOnChangeText} />);
+	it("hides clear button when value is empty", async () => {
+		await render(<SearchBar value="" onChangeText={mockOnChangeText} />);
 		expect(screen.queryByLabelText("clear-search")).toBeNull();
 	});
 
-	it("calls onChangeText with empty string when clear is pressed", () => {
-		render(<SearchBar value="fone" onChangeText={mockOnChangeText} />);
-		fireEvent.press(screen.getByLabelText("clear-search"));
+	it("calls onChangeText with empty string when clear is pressed", async () => {
+		await render(<SearchBar value="fone" onChangeText={mockOnChangeText} />);
+		await fireEvent.press(screen.getByLabelText("clear-search"));
 		expect(mockOnChangeText).toHaveBeenCalledWith("");
 	});
 });

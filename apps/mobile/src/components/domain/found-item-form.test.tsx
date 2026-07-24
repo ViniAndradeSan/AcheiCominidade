@@ -5,20 +5,12 @@ import {
 	waitFor,
 } from "@testing-library/react-native";
 
-jest.mock("@expo/vector-icons", () => {
-	const React = require("react");
-	const { Text } = require("react-native");
-	return {
-		Feather: (props) => React.createElement(Text, null, props.name),
-	};
-});
-
 jest.mock("@/hooks/use-address-autocomplete", () => ({
 	useAddressAutocomplete: () => ({ data: [], isLoading: false }),
 }));
 
 jest.mock("@/components/themed-text", () => ({
-	ThemedText: (props) => {
+	ThemedText: (props: any) => {
 		const React = require("react");
 		const { Text } = require("react-native");
 		return React.createElement(Text, null, props.children);
@@ -80,11 +72,12 @@ import { FoundItemForm } from "@/components/domain/found-item-form";
 
 describe("FoundItemForm — preenchimento de localizacao", () => {
 	beforeEach(() => {
+		jest.clearAllMocks();
 		mockCaptureCurrentLocation.mockResolvedValue("Rua das Flores, 123");
 	});
 
 	it("preenche o campo com o endereco retornado ao capturar o GPS", async () => {
-		await render(<FoundItemForm />);
+		render(<FoundItemForm />);
 
 		const locationInput = screen.getByPlaceholderText(
 			"Ex.: Bloco Y, 7º andar, sala 693",
@@ -94,10 +87,9 @@ describe("FoundItemForm — preenchimento de localizacao", () => {
 
 		fireEvent.press(screen.getByLabelText("use-current-location"));
 
-		await waitFor(() =>
-			expect(locationInput.props.value).toBe("Rua das Flores, 123"),
-		);
-
-		expect(mockCaptureCurrentLocation).toHaveBeenCalledTimes(1);
+		await waitFor(() => {
+			expect(mockCaptureCurrentLocation).toHaveBeenCalledTimes(1);
+			expect(locationInput.props.value).toBe("Rua das Flores, 123");
+		});
 	});
 });

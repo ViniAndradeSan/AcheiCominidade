@@ -1,13 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 
-jest.mock("@expo/vector-icons", () => {
-	const React = require("react");
-	const { Text } = require("react-native");
-	return {
-		Feather: (props) => React.createElement(Text, null, props.name),
-	};
-});
-
 jest.mock("@/components/themed-text", () => ({
 	ThemedText: (props) => {
 		const React = require("react");
@@ -50,8 +42,8 @@ describe("LocationField — autocomplete de localização", () => {
 		jest.clearAllMocks();
 	});
 
-	it("mostra sugestões quando o campo tem 3+ caracteres", () => {
-		render(
+	it("mostra sugestões quando o campo tem 3+ caracteres", async () => {
+		await render(
 			<LocationField
 				value="Rua das"
 				onChangeText={mockOnChangeText}
@@ -60,12 +52,15 @@ describe("LocationField — autocomplete de localização", () => {
 			/>,
 		);
 
+		const input = screen.getByPlaceholderText("Ex.: Bloco Y, 7º andar, sala 693");
+		await fireEvent(input, "focus");
+
 		expect(screen.getByText("Rua das Flores, 123, São Paulo")).toBeTruthy();
 		expect(screen.getByText("Rua da Consolação, 456, São Paulo")).toBeTruthy();
 	});
 
-	it("não mostra sugestões quando o campo tem menos de 3 caracteres", () => {
-		render(
+	it("não mostra sugestões quando o campo tem menos de 3 caracteres", async () => {
+		await render(
 			<LocationField
 				value="Ru"
 				onChangeText={mockOnChangeText}
@@ -74,11 +69,14 @@ describe("LocationField — autocomplete de localização", () => {
 			/>,
 		);
 
+		const input = screen.getByPlaceholderText("Ex.: Bloco Y, 7º andar, sala 693");
+		await fireEvent(input, "focus");
+
 		expect(screen.queryByText("Rua das Flores, 123, São Paulo")).toBeNull();
 	});
 
-	it("chama onChangeText e onSelectSuggestion ao tocar numa sugestão", () => {
-		render(
+	it("chama onChangeText e onSelectSuggestion ao tocar numa sugestão", async () => {
+		await render(
 			<LocationField
 				value="Rua das"
 				onChangeText={mockOnChangeText}
@@ -87,7 +85,10 @@ describe("LocationField — autocomplete de localização", () => {
 			/>,
 		);
 
-		fireEvent.press(screen.getByText("Rua das Flores, 123, São Paulo"));
+		const input = screen.getByPlaceholderText("Ex.: Bloco Y, 7º andar, sala 693");
+		await fireEvent(input, "focus");
+
+		await fireEvent.press(screen.getByText("Rua das Flores, 123, São Paulo"));
 
 		expect(mockOnChangeText).toHaveBeenCalledWith("Rua das Flores, 123, São Paulo");
 		expect(mockOnSelectSuggestion).toHaveBeenCalledWith({
