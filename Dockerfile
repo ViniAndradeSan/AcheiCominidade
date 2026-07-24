@@ -3,7 +3,7 @@
 # resolves when the workspace root (root package.json + tooling/biome) is
 # part of the build context — an apps/server-only context makes
 # `bun install --frozen-lockfile` fail.
-FROM oven/bun:alpine AS base
+FROM oven/bun:1.3.13-alpine AS base
 WORKDIR /usr/src/app
 # `prisma generate` (run via postinstall) loads prisma.config.ts, which calls
 # env("DATABASE_URL") and fails if the var is unset — even though generate
