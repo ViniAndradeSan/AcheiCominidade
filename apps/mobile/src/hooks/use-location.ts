@@ -112,5 +112,14 @@ export function useLocation() {
 		}
 	}
 
-	return { ...state, captureCurrentLocation };
+	function setManualLocation(lat: number, lon: number) {
+		setState((prev) => ({
+			...prev,
+			latitude: lat,
+			longitude: lon,
+			error: null,
+		}));
+	}
+
+	return { ...state, captureCurrentLocation, setManualLocation };
 }

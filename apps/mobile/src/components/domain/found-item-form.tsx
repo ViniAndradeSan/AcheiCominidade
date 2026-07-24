@@ -47,6 +47,7 @@ export function FoundItemForm({
 		loading: locationLoading,
 		error: locationError,
 		captureCurrentLocation,
+		setManualLocation,
 	} = useLocation();
 
 	const { data: categories, isLoading: categoriesLoading } = useCategories();
@@ -239,6 +240,7 @@ export function FoundItemForm({
 				value={locationText}
 				onChangeText={setLocationText}
 				onUseCurrentLocation={handleUseCurrentLocation}
+				onSelectSuggestion={(s) => setManualLocation(s.latitude, s.longitude)}
 				loadingLocation={locationLoading}
 				coordinatesCaptured={latitude !== null && longitude !== null}
 			/>
