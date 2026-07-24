@@ -1,9 +1,15 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from "@nestjs/common";
+import { Controller, Post, Body, HttpCode, HttpStatus, Logger } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { IsString, MaxLength } from "class-validator";
 import { StorageService } from "./storage.service";
 
 class PresignUploadDto {
+	@IsString()
+	@MaxLength(255)
 	filename!: string;
+
+	@IsString()
+	@MaxLength(100)
 	contentType!: string;
 }
 
@@ -15,6 +21,7 @@ class PresignResponseDto {
 @ApiTags("uploads")
 @Controller("uploads")
 export class StorageController {
+	private readonly logger = new Logger(StorageController.name);
 	constructor(private readonly storageService: StorageService) {}
 
 	@Post("presign")
@@ -24,6 +31,7 @@ export class StorageController {
 	async getPresignedUrl(
 		@Body() body: PresignUploadDto,
 	): Promise<PresignResponseDto> {
+		this.logger.log(`presign body: ${JSON.stringify(body)}`);
 		const { uploadUrl, publicUrl } =
 			await this.storageService.getPresignedUploadUrl(
 				body.filename,
