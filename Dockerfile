@@ -57,8 +57,10 @@ COPY --from=build /usr/src/app/apps/server/dist ./apps/server/dist
 # `bun run db:seed`, not bundled) imports the generated client via a relative
 # path — ship it too.
 COPY --from=build /usr/src/app/apps/server/src/generated ./apps/server/src/generated
+COPY apps/server/start.sh ./apps/server/start.sh
+RUN chmod +x ./apps/server/start.sh
 WORKDIR /usr/src/app/apps/server
 ENV PORT=3000
 ENV NODE_ENV=production
 EXPOSE ${PORT}
-CMD ["bun", "dist/main.js"]
+CMD ["sh", "apps/server/start.sh"]
