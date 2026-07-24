@@ -77,7 +77,7 @@ describe("FoundItemForm — preenchimento de localizacao", () => {
 	});
 
 	it("preenche o campo com o endereco retornado ao capturar o GPS", async () => {
-		render(<FoundItemForm />);
+		await render(<FoundItemForm />);
 
 		const locationInput = screen.getByPlaceholderText(
 			"Ex.: Bloco Y, 7º andar, sala 693",
@@ -85,7 +85,7 @@ describe("FoundItemForm — preenchimento de localizacao", () => {
 
 		expect(locationInput.props.value).toBe("");
 
-		fireEvent.press(screen.getByLabelText("use-current-location"));
+		await fireEvent.press(screen.getByLabelText("use-current-location"));
 
 		await waitFor(() => {
 			expect(mockCaptureCurrentLocation).toHaveBeenCalledTimes(1);
