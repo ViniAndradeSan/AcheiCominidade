@@ -58,5 +58,6 @@ COPY --from=build /usr/src/app/apps/server/dist ./apps/server/dist
 COPY --from=build /usr/src/app/apps/server/src/generated ./apps/server/src/generated
 WORKDIR /usr/src/app/apps/server
 ENV PORT=3000
+ENV NODE_ENV=production
 EXPOSE ${PORT}
-CMD ["bun", "run", "start:prod"]
+CMD ["bun", "dist/main.js"]
