@@ -19,10 +19,12 @@ import { EmptyState } from "@/components/domain/empty-state";
 import { ErrorState, getErrorMessage } from "@/components/domain/error-state";
 import { ItemCard } from "@/components/domain/item-card";
 import { ItemListSkeleton } from "@/components/domain/item-card-skeleton";
+import { SearchBar } from "@/components/domain/search-bar";
 import { StatusFilterTabs } from "@/components/domain/status-filter-tabs";
 import { ThemedView } from "@/components/themed-view";
 import { Spacing } from "@/constants/theme";
 import { useCategories } from "@/hooks/use-categories";
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useFoundItems } from "@/hooks/use-found-items";
 import { useTheme } from "@/hooks/use-theme";
 import { foundItemsKeys, getFoundItems } from "@/lib/api/found-items.queries";
@@ -34,6 +36,8 @@ export default function HomeScreen() {
 
 	const [categorySlug, setCategorySlug] = useState<string | null>(null);
 	const [status, setStatus] = useState<ItemStatus>("disponivel");
+	const [searchText, setSearchText] = useState("");
+	const debouncedSearch = useDebouncedValue(searchText, 400);
 
 	const { data: categories } = useCategories();
 
@@ -48,6 +52,7 @@ export default function HomeScreen() {
 	} = useFoundItems({
 		status,
 		category: categorySlug ?? undefined,
+		search: debouncedSearch.trim() || undefined,
 	});
 
 	const queryClient = useQueryClient();
@@ -113,9 +118,11 @@ export default function HomeScreen() {
 							onPress={() => setCategorySlug(c.slug)}
 						/>
 					))}
-				</ScrollView>
+			</ScrollView>
 
-				{isFetching && !isInitialLoading && !isRefetching ? (
+			<SearchBar value={searchText} onChangeText={setSearchText} />
+
+			{isFetching && !isInitialLoading && !isRefetching ? (
 					<ActivityIndicator
 						size="small"
 						color={theme.text}
@@ -145,16 +152,29 @@ export default function HomeScreen() {
 								onRetry={() => refetch()}
 							/>
 						) : (
-							<EmptyState
-								title="Nenhum item encontrado"
-								description={
-									categorySlug
+						<EmptyState
+							icon={
+								debouncedSearch
+									? "search"
+									: categorySlug
+										? "filter"
+										: "inbox"
+							}
+							title={
+								debouncedSearch
+									? `Nenhum resultado para "${debouncedSearch}"`
+									: "Nenhum item encontrado"
+							}
+							description={
+								debouncedSearch
+									? "Tente buscar com outras palavras"
+									: categorySlug
 										? "Nenhum item nessa categoria"
 										: `Nenhum item ${
 												status === "disponivel" ? "A procurar" : "devolvido"
 											} encontrado`
-								}
-							/>
+							}
+						/>
 						)
 					}
 				/>

@@ -103,10 +103,7 @@ export function FoundItemForm({
 				},
 				{
 					onSuccess: () => {
-						if (
-							typeof window !== "undefined" &&
-							window.history.length > 1
-						) {
+						if (router.canGoBack()) {
 							router.back();
 						} else {
 							router.replace("/");
@@ -123,10 +120,7 @@ export function FoundItemForm({
 				},
 				{
 					onSuccess: () => {
-						if (
-							typeof window !== "undefined" &&
-							window.history.length > 1
-						) {
+						if (router.canGoBack()) {
 							router.back();
 						} else {
 							router.replace("/");

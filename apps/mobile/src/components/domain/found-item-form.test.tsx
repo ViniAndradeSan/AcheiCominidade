@@ -44,6 +44,7 @@ jest.mock("expo-router", () => ({
 }));
 
 const mockCaptureCurrentLocation = jest.fn();
+const mockSetManualLocation = jest.fn();
 jest.mock("@/hooks/use-location", () => ({
 	useLocation: () => ({
 		latitude: -23.5505,
@@ -51,6 +52,7 @@ jest.mock("@/hooks/use-location", () => ({
 		loading: false,
 		error: null,
 		captureCurrentLocation: mockCaptureCurrentLocation,
+		setManualLocation: mockSetManualLocation,
 	}),
 }));
 

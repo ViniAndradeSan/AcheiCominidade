@@ -1,4 +1,5 @@
 import { Feather } from "@expo/vector-icons";
+import type { Feather as FeatherIcon } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
@@ -8,14 +9,19 @@ import { useTheme } from "@/hooks/use-theme";
 type EmptyStateProps = {
 	title: string;
 	description?: string;
+	icon?: keyof typeof FeatherIcon.glyphMap;
 };
 
-export function EmptyState({ title, description }: EmptyStateProps) {
+export function EmptyState({
+	title,
+	description,
+	icon = "inbox",
+}: EmptyStateProps) {
 	const theme = useTheme();
 
 	return (
 		<View style={styles.container}>
-			<Feather name="inbox" size={48} color={theme.textSecondary} />
+			<Feather name={icon} size={48} color={theme.textSecondary} />
 
 			<ThemedText type="subtitle" style={styles.title}>
 				{title}
